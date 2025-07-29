@@ -1,0 +1,329 @@
+/*
+Homework and Project writeup shared style sheet
+*/
+
+a img {
+  border: none;
+}
+
+body {
+  font-family: "Times New Roman", serif;
+  font-size: 12pt;
+  background-color: white;
+  color: black;
+}
+
+.boxed {
+  border: 1px solid black;
+}
+
+code,pre,samp,tt {
+  font-family: "Courier New", monospace;
+  font-size: 95%;
+}
+
+.correction {
+  background-color: yellow;
+}
+
+.credit {
+  font-style: italic;
+  margin-bottom: 1.5em;
+  text-align: center;
+}
+
+div#appearancedetails p.clear {
+  clear: right;
+}
+
+div.sample {
+  float: left;
+  margin: 12px;
+}
+
+.grades {
+  padding-right: 50px;
+}
+
+h1 {
+  font-size: 16pt;
+  text-align: center;
+  line-height: 1.1em;
+  padding-bottom: 10px;
+}
+
+h2 {
+  font-size: 14pt;
+}
+
+h3 {
+  font-family: "Arial", sans-serif;
+  font-size: 10pt;
+  margin: 0px;
+  text-align: center;
+}
+
+h4 {
+  font-family: "Arial", sans-serif;
+  font-size: 11pt;
+  margin: 0px;
+  margin-top: 1em;
+  padding: 0px;
+}
+
+h1,h2 {
+  font-family: "Arial", sans-serif;
+  margin-top: 18px;
+  margin-bottom: 0px;
+  clear: both;
+}
+
+.highlighted {
+  background-color: #FFEEEE;
+}
+
+hr.outputseparator {
+  color: black;
+  background-color: black;
+  height: 15px;
+  margin: 0px;
+}
+
+.vr {
+  height: 750px;
+  width: 10px;
+  background-color: black;
+}
+
+img.sample {
+  text-align: center;
+}
+
+img.right {
+  float: right;
+  margin-left: 10px;
+}
+
+li ul, li {
+  margin-top: 0px;
+  margin-bottom: 0px;
+  padding-top: 0px;
+  padding-bottom: 0px;
+  text-align: justify;
+}
+
+li.horizontal {
+  display: inline;
+  margin-right: 3em;
+}
+
+.longcode {
+  font-size: smaller;
+}
+
+.outputimagelist {
+  list-style-type: none;
+  padding-left: 0em;
+}
+
+.outputimagelist li, .outputimagelist li img {
+  margin-bottom: 0px;
+  margin-top: 0px;
+  padding-bottom: 0px;
+  padding-top: 0px;
+  text-align: center;
+  vertical-align: bottom;
+}
+
+p {
+  margin-bottom: 8px;
+  margin-top: 8px;
+  page-break-inside: avoid;
+  text-align: justify;
+}
+
+p.acknowledgement {
+  font-style: italic;
+  margin-top: 0px;
+  margin-bottom: 16px;
+  text-align: center;
+}
+
+.expectedoutput {
+  text-align: center;
+  line-height: 0em;
+  padding: 0px;
+  margin: 0px;
+}
+
+.expectedoutput img {
+  margin: 0px;
+  padding: 0px;
+  border: 0px;
+  vertical-align: top;
+}
+
+pre, code, samp {
+  font-family: "Courier New", monospace;
+}
+
+pre em {
+  background-color: #FFFFAA;
+}
+
+pre em, code em {
+  color: #660000;
+  font-style: normal;
+  font-weight: bold;
+}
+
+.rightfigure {
+  float: right;
+  margin-left: 1em;
+}
+
+.w3c {
+  float: right;
+  margin-left: 1em;
+}
+
+.subheading {
+  font-size: smaller;
+}
+
+ul {
+  margin-top: 9px;
+}
+
+ul p {
+  margin-top: 3px;
+  margin-bottom: 3px;
+}
+
+.split {
+  text-align: center;
+}
+
+.split li {
+  display: inline;
+}
+
+.split li img {
+  max-width: 45%;
+}
+
+.split li .outputseparator {
+  display: inline;
+  height: 100px;
+  vertical-align: middle;
+  width: 15px;
+}
+
+.subheading {
+  font-size: 80%;
+}
+
+.syntaxtemplate {
+  color: #660000;
+  font-family: "Arial", sans-serif;
+  font-style: italic;
+}
+
+.paramtable {
+  border-collapse: collapse;
+  caption-side: top;
+  margin: 0.5em auto 0.5em auto;
+  min-width: 40%;
+}
+
+.paramtable caption {
+  text-align: center;
+  margin: 0em auto;
+}
+
+.paramtable td, .paramtable th {
+  border: 1px solid gray;
+  padding: 0.25em;
+}
+
+.url {
+  font-family: Garamond, serif;
+  color: #000066;
+}
+
+pre {
+  background-color: #F8F8FF;
+  border: 1px dashed blue;
+  padding: 0.2em 0.5em;
+}
+
+/* ==========================================
+   Fifteen Puzzle Specific Styles
+========================================== */
+
+#puzzlearea {
+  width: 400px;
+  height: 400px;
+  margin: 0 auto 20px;
+  position: relative;
+  border: 4px solid black;
+  overflow: hidden;
+}
+
+.puzzlepiece {
+  width: 100px;
+  height: 100px;
+  border: 2px solid black;
+  position: absolute;
+  font-size: 16pt;
+  line-height: 100px;
+  text-align: center;
+  background-image: url("img/background.jpg");
+  background-size: 400px 400px;
+  background-repeat: no-repeat;
+  font-weight: bold;
+  color: black;
+  cursor: pointer;
+  user-select: none;
+  font-family: "Arial", sans-serif;
+  transition: all 0.2s ease-in-out;
+  box-sizing: border-box;
+}
+
+.movablepiece {
+  border-color: red;
+  color: #006600;
+  text-decoration: underline;
+}
+
+.controls {
+  text-align: center;
+  margin-top: 10px;
+}
+
+.validators {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 30px;
+}
+
+.validators img {
+  height: 40px;
+}
+
+#win-message {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.9);
+  color: darkgreen;
+  font-size: 32pt;
+  font-weight: bold;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fifteen Puzzle</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="fifteen.js" defer></script>
+</head>
+<body>
+
+    <header>
+        <h1>Fifteen Puzzle</h1>
+    </header>
+
+    <section class="intro">
+        <div>
+        The goal of the fifteen puzzle is to un-jumble its fifteen squares
+        by repeatedly making moves that slide squares into the empty space.
+        How quickly can you solve it?
+        </div>
+    </section><br>
+
+    <div>
+        <div id="puzzlearea">
+            <div class="controls">
+        </div>
+    </div>
+
+    <div style="text-align: center;">
+        <button id="shufflebutton">Shuffle</button>
+    </div><br>
+
+    <section class="history">
+        <div>
+            American puzzle author and mathematician Sam Loyd is often falsely credited with creating the puzzle;
+            indeed, Loyd claimed from 1891 until his death in 1911 that he invented it.
+            The puzzle was actually created around 1874 by Noyes Palmer Chapman, a postmaster in Canastota, New York.
+        </div>
+    </section>
+
+    <div class="validators">
+        <div class="validators" style="position: fixed; bottom: 10px; right: 10px; z-index: 100;">
+            <a href="https://validator.w3.org/"><img src="./img/valid-xhtml11.png" alt="HTML Validator"></a>
+            <a href="https://jigsaw.w3.org/css-validator/"><img src="./img/valid-css.png" alt="CSS Validator"></a>
+            <a href="https://jslint.com/">
+                <img src="./img/valid-jslint.png" alt="JSLint Validator" style="width:100px; height:42px;">
+            </a>
+        </div>
+    </div>
+    <div id="win-message">
+        🎉 Congratulations, Puzzle solved! 🎉
+    </div>
+</body>
+</html>
