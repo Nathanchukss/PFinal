@@ -1,6 +1,6 @@
 # 🧩 Fifteen Puzzle
 
-A classic sliding tile puzzle built with **HTML**, **CSS**, and **JavaScript**.  
+A classic sliding tile puzzle built with **PHP**, **HTML**, **CSS**, and **JavaScript**.  
 The objective is to arrange 15 numbered tiles into sequential order by sliding them into the empty space — with smooth animations, a custom background image, and win detection.
 
 ---
@@ -23,9 +23,17 @@ The objective is to arrange 15 numbered tiles into sequential order by sliding t
 
 ```bash
 /fifteen-puzzle/
-├── fifteen.html
+├── admin.php
+├── db.php
 ├── fifteen.js
+├── fifteen.php
+├── fifteen.js
+├── login.php
+├── logout.php
+├── register.php
 ├── style.css
+├── upload_image.php
+├── uploads/
 └── img/
     ├── background.jpg
     ├── valid-xhtml11.png
@@ -33,7 +41,7 @@ The objective is to arrange 15 numbered tiles into sequential order by sliding t
     └── valid-jslint.png
 ```
 
-3. Open `fifteen.html` in any modern web browser.
+3. Open `login.php` in any modern web browser.
 
 ---
 
@@ -42,7 +50,8 @@ The objective is to arrange 15 numbered tiles into sequential order by sliding t
 - Each tile is positioned using `absolute` layout and updated via JavaScript  
 - The shuffle algorithm simulates 300 legal moves to ensure solvability  
 - The game tracks the blank tile’s position and compares all tiles to their correct positions to determine win state  
-- CSS transitions animate tile movement smoothly  
+- CSS transitions animate tile movement smoothly
+- 
 
 ---
 
@@ -50,7 +59,8 @@ The objective is to arrange 15 numbered tiles into sequential order by sliding t
 
 - HTML5  
 - CSS3 (Flexbox, background slicing, transitions)  
-- JavaScript (DOM manipulation, event handling)  
+- JavaScript (DOM manipulation, event handling)
+- PHP  
 
 ---
 
@@ -58,5 +68,5 @@ The objective is to arrange 15 numbered tiles into sequential order by sliding t
 
 - 🎉 End-of-game notification — Displays a message when the puzzle is solved  
 - 💨 Tile movement animations — CSS-based smooth transitions  
-
+- 👨🏽‍💻 Database management ( Currently Under implementation )
 ---
