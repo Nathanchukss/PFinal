@@ -21,6 +21,8 @@ window.onload = function () {
         tile.style.left = x + "px";
         tile.style.top = y + "px";
         tile.style.backgroundPosition = `-${x}px -${y}px`;
+        tile.style.backgroundSize = "400px 400px";
+        tile.style.backgroundImage = "url('img/background.jpg')"; // default
         tile.style.position = "absolute";
         tile.style.cursor = "pointer";
 
@@ -51,6 +53,16 @@ window.onload = function () {
   });
 
   document.getElementById("shufflebutton").addEventListener("click", shuffle);
+
+  const dropdown = document.getElementById("bg-select");
+  if (dropdown) {
+    dropdown.addEventListener("change", function () {
+      changeBackground(this.value);
+    });
+
+    // Set initial background on load
+    changeBackground(dropdown.value);
+  }
 
   function isMovable(tile) {
     const x = parseInt(tile.style.left);
@@ -86,7 +98,9 @@ window.onload = function () {
     }
 
     gameStarted = true;
-    document.getElementById("win-message").style.display = "none"; // Hide win message on new shuffle
+    document.getElementById("win-message").style.display = "none";
+
+    if (dropdown) changeBackground(dropdown.value); // reapply background
   }
 
   function checkIfSolved() {
@@ -112,3 +126,16 @@ window.onload = function () {
     }
   }
 };
+
+function changeBackground(imagePath) {
+  const tiles = document.querySelectorAll(".puzzlepiece");
+
+  tiles.forEach((tile, index) => {
+    const x = (index % 4) * 100;
+    const y = Math.floor(index / 4) * 100;
+
+    tile.style.backgroundImage = imagePath ? `url('${imagePath}')` : "url('img/background.jpg')";
+    tile.style.backgroundSize = "400px 400px";
+    tile.style.backgroundPosition = `-${x}px -${y}px`;
+  });
+}
