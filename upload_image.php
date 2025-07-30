@@ -22,11 +22,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['bg_image'])) {
     $targetPath = "uploads/" . $filename;
 
     if (move_uploaded_file($file['tmp_name'], $targetPath)) {
-      $stmt = $pdo->prepare("INSERT INTO background_images (filename, uploaded_by) VALUES (?, ?)");
-      $stmt->execute([$filename, $_SESSION['user_id']]);
-      echo "Image uploaded successfully.";
+        $stmt = $pdo->prepare("INSERT INTO background_images (filename, image_url, is_active, uploaded_by_user_id)
+        VALUES (?, ?, 1, ?)");
+        $stmt->execute([$filename, $targetPath, $_SESSION['user_id']]);
+        echo "Image uploaded successfully.";
     } else {
-      echo "Failed to move uploaded file.";
+        echo "Failed to move uploaded file.";
     }
   }
 }
