@@ -1,6 +1,8 @@
 "use strict";
 
 window.onload = function () {
+  let moveCount = 0;
+  let startTime = null;
   const puzzleArea = document.getElementById("puzzlearea");
   const tiles = [];
   let blankX = 300;
@@ -83,6 +85,7 @@ window.onload = function () {
     blankY = y;
 
     checkIfSolved();
+    moveCount++;
   }
 
   function shuffle() {
@@ -98,6 +101,8 @@ window.onload = function () {
     }
 
     gameStarted = true;
+    moveCount = 0;
+    startTime = Date.now();
     document.getElementById("win-message").style.display = "none";
 
     if (dropdown) changeBackground(dropdown.value); // reapply background
@@ -121,7 +126,13 @@ window.onload = function () {
 
     if (isSolved && blankX === 300 && blankY === 300) {
       document.getElementById("win-message").style.display = "flex";
-    } else {
+
+      const timeTaken = Math.floor((Date.now() - startTime) / 1000);
+      const bgDropdown = document.getElementById("bg-select");
+      const backgroundPath = bgDropdown ? bgDropdown.value : "";
+
+      sendGameStats(timeTaken, moveCount, backgroundPath);
+    }else {
       document.getElementById("win-message").style.display = "none";
     }
   }
@@ -137,5 +148,20 @@ function changeBackground(imagePath) {
     tile.style.backgroundImage = imagePath ? `url('${imagePath}')` : "url('img/background.jpg')";
     tile.style.backgroundSize = "400px 400px";
     tile.style.backgroundPosition = `-${x}px -${y}px`;
+  });
+}
+
+function sendGameStats(timeTaken, movesCount, backgroundPath) {
+  fetch("save_game_stats.php", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      time_taken: timeTaken,
+      moves: movesCount,
+      win: true,
+      background: backgroundPath
+    })
   });
 }

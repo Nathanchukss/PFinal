@@ -2,6 +2,7 @@
 session_start();
 require 'db.php';
 
+// Check for cookie auto-login
 if (!isset($_SESSION['user_id']) && isset($_COOKIE['auth_token'])) {
     $stmt = $pdo->prepare("SELECT * FROM users WHERE remember_token = ?");
     $stmt->execute([$_COOKIE['auth_token']]);
@@ -15,10 +16,20 @@ if (!isset($_SESSION['user_id']) && isset($_COOKIE['auth_token'])) {
 }
 
 // Load available backgrounds
-$bgImages = $pdo->query("SELECT * FROM background_images ORDER BY upload_time DESC")->fetchAll();
-if (!isset($_SESSION['user_id'])) {
-  header("Location: login.php");
-  exit();
+$bgImages = $pdo->query("SELECT * FROM background_images WHERE is_active = 1 ORDER BY upload_time DESC")->fetchAll();
+
+// Load user preferred background if logged in
+$preferred_bg = "";
+if (isset($_SESSION['user_id'])) {
+    $stmt = $pdo->prepare("SELECT preferred_background FROM user_preferences WHERE user_id = ?");
+    $stmt->execute([$_SESSION['user_id']]);
+    $prefs = $stmt->fetch();
+    if ($prefs && !empty($prefs['preferred_background'])) {
+        $preferred_bg = $prefs['preferred_background'];
+    }
+} else {
+    header("Location: login.php");
+    exit();
 }
 ?>
 
@@ -32,25 +43,19 @@ if (!isset($_SESSION['user_id'])) {
   <script src="fifteen.js" defer></script>
 </head>
 <body>
-    <nav style="background: #333; padding: 12px 0; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
-        <ul style="list-style: none; margin: 0; padding: 0; display: flex; justify-content: center; align-items: center; gap: 20px;">
+    <nav style="background: #333; padding: 12px;">
+        <ul style="list-style: none; display: flex; justify-content: center; gap: 20px; margin: 0; padding: 0;">
+
             <?php if ($_SESSION['role'] === 'admin'): ?>
-                <li>
-                    <a href="admin.php" style="background: #2ecc71; color: #fff; padding: 8px 20px; border-radius: 5px; text-decoration: none; font-weight: bold; display: inline-block;">
-                        Admin Panel
-                    </a>
-                </li>
+                <li><a href="admin.php" style="background: #2ecc71; color: #fff; padding: 8px 20px; border-radius: 5px; text-decoration: none;">Admin Panel</a></li>
             <?php endif; ?>
-            <li>
-                <a href="logout.php" style="background: #e74c3c; color: #fff; padding: 8px 20px; border-radius: 5px; text-decoration: none; font-weight: bold; display: inline-block;">
-                    Logout
-                </a>
-            </li>
-            <li>
-                <a href="upload_image.php" style="background: #3498db; color: #fff; padding: 6px 16px; border-radius: 5px; text-decoration: none;">
-                    Upload your own puzzle image
-                </a>
-            </li>
+
+            <li><a href="upload_image.php" style="background: #3498db; color: #fff; padding: 6px 16px; border-radius: 5px; text-decoration: none;">Upload Image</a></li>
+
+            <li><a href="preferences.php" style="background: #9b59b6; color: #fff; padding: 6px 16px; border-radius: 5px; text-decoration: none;">Preferences</a></li>
+
+            <li><a href="logout.php" style="background: #e74c3c; color: #fff; padding: 8px 20px; border-radius: 5px; text-decoration: none;">Logout</a></li>
+
         </ul>
     </nav>
 
@@ -72,7 +77,8 @@ if (!isset($_SESSION['user_id'])) {
         <select id="bg-select" onchange="changeBackground(this.value)">
             <option value="">Default</option>
             <?php foreach ($bgImages as $bg): ?>
-                <option value="uploads/<?= htmlspecialchars($bg['filename']) ?>">
+                <option value="uploads/<?= htmlspecialchars($bg['filename']) ?>"
+                <?= ($preferred_bg === $bg['filename']) ? 'selected' : '' ?>>
                 <?= htmlspecialchars($bg['filename']) ?>
                 </option>
             <?php endforeach; ?>

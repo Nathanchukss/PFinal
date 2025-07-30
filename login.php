@@ -12,10 +12,17 @@ if (!isset($_SESSION['user_id']) && isset($_COOKIE['auth_token'])) {
         $_SESSION['user_id'] = $user['user_id'];
         $_SESSION['username'] = $user['username'];
         $_SESSION['role'] = $user['role'];
+
+        // Update last_login from cookie login too
+        $now = date('Y-m-d H:i:s');
+        $update = $pdo->prepare("UPDATE users SET last_login = ? WHERE user_id = ?");
+        $update->execute([$now, $user['user_id']]);
+
         header("Location: fifteen.php");
         exit();
     }
 }
+
 
 // Handle login submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -30,6 +37,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $_SESSION['user_id'] = $user['user_id'];
         $_SESSION['username'] = $user['username'];
         $_SESSION['role'] = $user['role'];
+
+        // Update last_login timestamp
+        $now = date('Y-m-d H:i:s');
+        $update = $pdo->prepare("UPDATE users SET last_login = ? WHERE user_id = ?");
+        $update->execute([$now, $user['user_id']]);
 
         // Handle Remember Me
         if (isset($_POST['remember'])) {
@@ -46,7 +58,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 ?>
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -55,7 +66,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
 <form method="POST" class="auth-form">
   <h2>Login</h2>
 
@@ -72,9 +82,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <label><input type="checkbox" name="remember"> Remember Me</label>
 
   <button type="submit">Login</button>
-
   <p>New here? <a href="register.php">Create an account</a></p>
 </form>
-
 </body>
 </html>
