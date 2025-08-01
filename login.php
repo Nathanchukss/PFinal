@@ -9,20 +9,23 @@ if (!isset($_SESSION['user_id']) && isset($_COOKIE['auth_token'])) {
     $user = $stmt->fetch();
 
     if ($user) {
-        $_SESSION['user_id'] = $user['user_id'];
-        $_SESSION['username'] = $user['username'];
-        $_SESSION['role'] = $user['role'];
+        if (!$user['active']) {
+            $error = "Your account has been deactivated.";
+        } else {
+            $_SESSION['user_id'] = $user['user_id'];
+            $_SESSION['username'] = $user['username'];
+            $_SESSION['role'] = $user['role'];
 
-        // Update last_login from cookie login too
-        $now = date('Y-m-d H:i:s');
-        $update = $pdo->prepare("UPDATE users SET last_login = ? WHERE user_id = ?");
-        $update->execute([$now, $user['user_id']]);
+            // Update last_login from cookie login too
+            $now = date('Y-m-d H:i:s');
+            $update = $pdo->prepare("UPDATE users SET last_login = ? WHERE user_id = ?");
+            $update->execute([$now, $user['user_id']]);
 
-        header("Location: fifteen.php");
-        exit();
+            header("Location: fifteen.php");
+            exit();
+        }
     }
 }
-
 
 // Handle login submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -33,26 +36,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt->execute([$username]);
     $user = $stmt->fetch();
 
-    if ($user && password_verify($password, $user['password_hash'])) {
-        $_SESSION['user_id'] = $user['user_id'];
-        $_SESSION['username'] = $user['username'];
-        $_SESSION['role'] = $user['role'];
+    if ($user) {
+        if (!$user['active']) {
+            $error = "Your account has been deactivated.";
+        } elseif (password_verify($password, $user['password_hash'])) {
+            $_SESSION['user_id'] = $user['user_id'];
+            $_SESSION['username'] = $user['username'];
+            $_SESSION['role'] = $user['role'];
 
-        // Update last_login timestamp
-        $now = date('Y-m-d H:i:s');
-        $update = $pdo->prepare("UPDATE users SET last_login = ? WHERE user_id = ?");
-        $update->execute([$now, $user['user_id']]);
+            // Update last_login timestamp
+            $now = date('Y-m-d H:i:s');
+            $update = $pdo->prepare("UPDATE users SET last_login = ? WHERE user_id = ?");
+            $update->execute([$now, $user['user_id']]);
 
-        // Handle Remember Me
-        if (isset($_POST['remember'])) {
-            $token = bin2hex(random_bytes(16));
-            setcookie("auth_token", $token, time() + (86400 * 30), "/"); // 30 days
-            $stmt = $pdo->prepare("UPDATE users SET remember_token = ? WHERE user_id = ?");
-            $stmt->execute([$token, $user['user_id']]);
+            // Handle Remember Me
+            if (isset($_POST['remember'])) {
+                $token = bin2hex(random_bytes(16));
+                setcookie("auth_token", $token, time() + (86400 * 30), "/"); // 30 days
+                $stmt = $pdo->prepare("UPDATE users SET remember_token = ? WHERE user_id = ?");
+                $stmt->execute([$token, $user['user_id']]);
+            }
+
+            header("Location: fifteen.php");
+            exit();
+        } else {
+            $error = "Invalid password.";
         }
-
-        header("Location: fifteen.php");
-        exit();
     } else {
         $error = "Invalid username or password.";
     }
