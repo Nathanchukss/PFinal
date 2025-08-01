@@ -1,6 +1,9 @@
 /*
-Homework and Project writeup shared style sheet
+
 */
+/* ================================================
+   Homework and Project writeup shared style sheet
+=================================================== */
 
 a img {
   border: none;
@@ -258,7 +261,7 @@ pre {
 }
 
 /* ==========================================
-   Fifteen Puzzle Specific Styles
+   My own Fifteen Puzzle Specific Styles
 ========================================== */
 
 #puzzlearea {
@@ -278,7 +281,6 @@ pre {
   font-size: 16pt;
   line-height: 100px;
   text-align: center;
-  background-image: url("img/background.jpg");
   background-size: 400px 400px;
   background-repeat: no-repeat;
   font-weight: bold;
@@ -289,6 +291,7 @@ pre {
   transition: all 0.2s ease-in-out;
   box-sizing: border-box;
 }
+
 
 .movablepiece {
   border-color: red;
@@ -326,4 +329,51 @@ pre {
   justify-content: center;
   align-items: center;
   z-index: 9999;
+}
+
+/* forms style */
+.auth-form {
+  max-width: 400px;
+  margin: 40px auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #fafafa;
+  font-family: Arial, sans-serif;
+}
+
+.auth-form h2 {
+  text-align: center;
+  color: #333;
+}
+
+.auth-form input[type="text"],
+.auth-form input[type="email"],
+.auth-form input[type="password"] {
+  width: 100%;
+  padding: 10px;
+  margin: 8px 0;
+  border-radius: 4px;
+  border: 1px solid #bbb;
+  box-sizing: border-box;
+}
+
+.auth-form button {
+  width: 100%;
+  background-color: #2ecc71;
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 4px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.auth-form button:hover {
+  background-color: #27ae60;
+}
+
+.auth-form p {
+  text-align: center;
+  margin-top: 10px;
 }
