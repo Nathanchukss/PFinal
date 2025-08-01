@@ -19,7 +19,14 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     } catch (PDOException $e) {
         if ($e->errorInfo[1] == 1062) {
-            $error = "Username already exists. Please choose another.";
+            // Check which field caused the duplicate entry
+            if (str_contains($e->errorInfo[2], 'username')) {
+                $error = "Username already exists. Please choose another.";
+            } elseif (str_contains($e->errorInfo[2], 'email')) {
+                $error = "An account with this email already exists.";
+            } else {
+                $error = "Duplicate entry. Please try a different username or email.";
+            }
         } else {
             $error = "Error: " . $e->getMessage();
         }
