@@ -20,13 +20,13 @@ body {
 
 /* Navigation */
 nav {
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(10px);
-  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
-  padding: 15px 0;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 0;
   position: sticky;
   top: 0;
   z-index: 1000;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
 }
 
 nav ul {
@@ -34,87 +34,119 @@ nav ul {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 25px;
+  gap: 0;
   margin: 0;
   padding: 0;
   max-width: 1200px;
   margin: 0 auto;
+  height: 70px;
 }
 
-
+nav ul li {
+  position: relative;
+  height: 100%;
+}
 
 /* Navigation button styles */
-.nav-btn {
-  background: linear-gradient(135deg, #667eea, #764ba2);
-  color: white;
-  padding: 12px 24px;
-  border-radius: 25px;
-  text-decoration: none;
-  font-weight: 600;
+nav ul li a.nav-btn {
+  background: transparent;
+  color: #e8e8e8 !important;
+  padding: 0 30px;
+  text-decoration: none !important;
+  font-weight: 500;
+  font-size: 14px;
+  letter-spacing: 0.5px;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
   position: relative;
-  overflow: hidden;
+  display: flex;
+  align-items: center;
+  height: 100%;
+  cursor: pointer;
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+  text-transform: uppercase;
 }
 
-.nav-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+nav ul li:last-child a.nav-btn {
+  border-right: none;
 }
 
-.nav-btn::before {
+nav ul li a.nav-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff !important;
+  text-decoration: none !important;
+  transform: none;
+}
+
+nav ul li a.nav-btn::before {
   content: '';
   position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-  transition: left 0.5s;
+  bottom: 0;
+  left: 50%;
+  width: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #667eea, #764ba2);
+  transition: all 0.3s ease;
+  transform: translateX(-50%);
 }
 
-.nav-btn:hover::before {
-  left: 100%;
+nav ul li a.nav-btn:hover::before {
+  width: 100%;
 }
 
 /* Admin Panel button */
-.admin-btn {
-  background: linear-gradient(135deg, #2ecc71, #27ae60);
-  box-shadow: 0 4px 15px rgba(46, 204, 113, 0.3);
+nav ul li a.nav-btn.admin-btn {
+  color: #4ade80 !important;
 }
 
-.admin-btn:hover {
-  box-shadow: 0 6px 20px rgba(46, 204, 113, 0.4);
+nav ul li a.nav-btn.admin-btn:hover {
+  background: rgba(74, 222, 128, 0.1);
+  color: #4ade80 !important;
+}
+
+nav ul li a.nav-btn.admin-btn::before {
+  background: linear-gradient(90deg, #4ade80, #22c55e);
 }
 
 /* Upload Image button */
-.upload-btn {
-  background: linear-gradient(135deg, #3498db, #2980b9);
-  box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+nav ul li a.nav-btn.upload-btn {
+  color: #60a5fa !important;
 }
 
-.upload-btn:hover {
-  box-shadow: 0 6px 20px rgba(52, 152, 219, 0.4);
+nav ul li a.nav-btn.upload-btn:hover {
+  background: rgba(96, 165, 250, 0.1);
+  color: #60a5fa !important;
+}
+
+nav ul li a.nav-btn.upload-btn::before {
+  background: linear-gradient(90deg, #60a5fa, #3b82f6);
 }
 
 /* Preferences button */
-.preferences-btn {
-  background: linear-gradient(135deg, #9b59b6, #8e44ad);
-  box-shadow: 0 4px 15px rgba(155, 89, 182, 0.3);
+nav ul li a.nav-btn.preferences-btn {
+  color: #a78bfa !important;
 }
 
-.preferences-btn:hover {
-  box-shadow: 0 6px 20px rgba(155, 89, 182, 0.4);
+nav ul li a.nav-btn.preferences-btn:hover {
+  background: rgba(167, 139, 250, 0.1);
+  color: #a78bfa !important;
+}
+
+nav ul li a.nav-btn.preferences-btn::before {
+  background: linear-gradient(90deg, #a78bfa, #8b5cf6);
 }
 
 /* Logout button */
-.logout-btn {
-  background: linear-gradient(135deg, #e74c3c, #c0392b);
-  box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
+nav ul li a.nav-btn.logout-btn {
+  color: #f87171 !important;
 }
 
-.logout-btn:hover {
-  box-shadow: 0 6px 20px rgba(231, 76, 60, 0.4);
+nav ul li a.nav-btn.logout-btn:hover {
+  background: rgba(248, 113, 113, 0.1);
+  color: #f87171 !important;
+}
+
+nav ul li a.nav-btn.logout-btn::before {
+  background: linear-gradient(90deg, #f87171, #ef4444);
 }
 
 /* Main container */
@@ -416,7 +448,23 @@ form label {
   
   nav ul {
     flex-direction: column;
-    gap: 15px;
+    gap: 0;
+    height: auto;
+  }
+  
+  nav ul li {
+    height: 50px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  nav ul li:last-child {
+    border-bottom: none;
+  }
+  
+  nav ul li a.nav-btn {
+    border-right: none;
+    padding: 0 20px;
+    font-size: 13px;
   }
   
   #puzzlearea {

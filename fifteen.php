@@ -45,23 +45,25 @@ if (isset($_SESSION['user_id'])) {
 <body>
     <nav>
         <ul>
-            <!-- Debug info -->
-            <li style="color: white; font-size: 12px; margin-right: 20px;">
-                Role: <?= htmlspecialchars($_SESSION['role'] ?? 'none') ?>
-            </li>
-
             <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin'): ?>
-                <li><a href="admin.php" class="nav-btn admin-btn">Admin Panel</a></li>
+                <li><a href="admin.php" class="nav-btn admin-btn" onclick="console.log('Admin Panel clicked'); return true;">Admin Panel</a></li>
             <?php endif; ?>
 
-            <li><a href="upload_image.php" class="nav-btn upload-btn">Upload Image</a></li>
+            <li><a href="upload_image.php" class="nav-btn upload-btn" onclick="console.log('Upload Image clicked'); return true;">Upload Image</a></li>
 
-            <li><a href="preferences.php" class="nav-btn preferences-btn">Preferences</a></li>
+            <li><a href="preferences.php" class="nav-btn preferences-btn" onclick="console.log('Preferences clicked'); return true;">Preferences</a></li>
 
-            <li><a href="logout.php" class="nav-btn logout-btn">Logout</a></li>
+            <li><a href="logout.php" class="nav-btn logout-btn" onclick="console.log('Logout clicked'); return true;">Logout</a></li>
 
         </ul>
     </nav>
+    
+    <!-- Debug info -->
+    <div style="position: fixed; top: 10px; right: 10px; background: rgba(0,0,0,0.8); color: white; padding: 10px; border-radius: 5px; font-size: 12px; z-index: 9999;">
+        Role: <?= htmlspecialchars($_SESSION['role'] ?? 'none') ?><br>
+        User ID: <?= htmlspecialchars($_SESSION['user_id'] ?? 'none') ?><br>
+        Username: <?= htmlspecialchars($_SESSION['username'] ?? 'none') ?>
+    </div>
 
     <header>
         <h1>Fifteen Puzzle</h1>
