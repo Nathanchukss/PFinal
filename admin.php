@@ -8,7 +8,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
 
 // Handle actions (user update or image actions)
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // User actions
+    // Player actions
     if (isset($_POST['user_id']) && $_POST['user_id'] != $_SESSION['user_id']) {
         $uid = $_POST['user_id'];
         if ($_POST['action'] === 'toggle_active') {
@@ -35,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 // Fetch data
-$users = $pdo->query("SELECT * FROM users ORDER BY registered_at DESC")->fetchAll();
+$players = $pdo->query("SELECT * FROM users ORDER BY registered_at DESC")->fetchAll();
 $images = $pdo->query("
     SELECT bg.*, u.username FROM background_images bg
     JOIN users u ON bg.uploaded_by_user_id = u.user_id
@@ -64,27 +64,27 @@ $stats = $pdo->query("
   </style>
 </head>
 <body>
-  <h1>Admin Dashboard</h1>
+  <h1>Dashboard</h1>
   <p><a href="fifteen.php">← Back to Puzzle</a></p>
 
-  <h2>👥 User Management</h2>
+  <h2>Player Management</h2>
   <table>
     <tr><th>ID</th><th>Username</th><th>Email</th><th>Role</th><th>Status</th><th>Actions</th></tr>
-    <?php foreach ($users as $u): ?>
+    <?php foreach ($players as $p): ?>
       <tr>
-        <td><?= $u['user_id'] ?></td>
-        <td><?= htmlspecialchars($u['username']) ?></td>
-        <td><?= htmlspecialchars($u['email']) ?></td>
-        <td><?= $u['role'] ?></td>
-        <td><?= $u['active'] ? 'Active' : 'Deactivated' ?></td>
+        <td><?= $p['user_id'] ?></td>
+        <td><?= htmlspecialchars($p['username']) ?></td>
+        <td><?= htmlspecialchars($p['email']) ?></td>
+        <td><?= $p['role'] ?></td>
+        <td><?= $p['active'] ? 'Active' : 'Deactivated' ?></td>
         <td>
-          <?php if ($u['user_id'] != $_SESSION['user_id']): ?>
+          <?php if ($p['user_id'] != $_SESSION['user_id']): ?>
             <form method="POST" style="display:inline;">
-              <input type="hidden" name="user_id" value="<?= $u['user_id'] ?>">
-              <button name="action" value="toggle_active"><?= $u['active'] ? 'Deactivate' : 'Activate' ?></button>
-              <?php if ($u['role'] === 'player'): ?>
+              <input type="hidden" name="user_id" value="<?= $p['user_id'] ?>">
+              <button name="action" value="toggle_active"><?= $p['active'] ? 'Deactivate' : 'Activate' ?></button>
+              <?php if ($p['role'] === 'player'): ?>
                 <button name="action" value="promote">Promote to Admin</button>
-              <?php elseif ($u['role'] === 'admin'): ?>
+              <?php elseif ($p['role'] === 'admin'): ?>
                 <button name="action" value="demote">Demote to Player</button>
               <?php endif; ?>
             </form>
@@ -96,7 +96,7 @@ $stats = $pdo->query("
     <?php endforeach; ?>
   </table>
 
-  <h2>🖼️ Uploaded Background Images</h2>
+  <h2>Uploaded Background Images</h2>
   <table>
     <tr><th>Preview</th><th>Filename</th><th>Uploader</th><th>Status</th><th>Uploaded</th><th>Actions</th></tr>
     <?php foreach ($images as $img): ?>
@@ -117,7 +117,7 @@ $stats = $pdo->query("
     <?php endforeach; ?>
   </table>
 
-  <h2>📊 Game Statistics (Recent)</h2>
+  <h2>Game Statistics (Recent)</h2>
   <table>
     <tr><th>Player</th><th>Time (s)</th><th>Moves</th><th>Win</th><th>Background</th><th>Date</th></tr>
     <?php foreach ($stats as $s): ?>
