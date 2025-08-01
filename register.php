@@ -8,12 +8,22 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
     $now = date('Y-m-d H:i:s');
 
-    $stmt = $pdo->prepare("INSERT INTO users (username, password_hash, email, role, registration_date, last_login)
-                           VALUES (?, ?, ?, 'player', ?, ?)");
-    $stmt->execute([$username, $hashedPassword, $email, $now, $now]);
+    try {
+        $stmt = $pdo->prepare("INSERT INTO users (username, password_hash, email, role, registration_date, last_login)
+                               VALUES (?, ?, ?, 'player', ?, ?)");
+        $stmt->execute([$username, $hashedPassword, $email, $now, $now]);
 
-    header("Location: login.php");
-    exit;
+        // Redirect on success
+        header("Location: login.php");
+        exit;
+
+    } catch (PDOException $e) {
+        if ($e->errorInfo[1] == 1062) {
+            $error = "Username already exists. Please choose another.";
+        } else {
+            $error = "Error: " . $e->getMessage();
+        }
+    }
 }
 ?>
 <!DOCTYPE html>
@@ -26,6 +36,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 <body>
 <form method="POST" class="auth-form">
   <h2>Register</h2>
+
+  <?php if (isset($error)): ?>
+    <p style="color: red; text-align:center;"><?= htmlspecialchars($error) ?></p>
+  <?php endif; ?>
+
   <label>Username:</label>
   <input type="text" name="username" required>
 
