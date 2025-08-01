@@ -58,12 +58,7 @@ if (isset($_SESSION['user_id'])) {
         </ul>
     </nav>
     
-    <!-- Debug info -->
-    <div style="position: fixed; top: 10px; right: 10px; background: rgba(0,0,0,0.8); color: white; padding: 10px; border-radius: 5px; font-size: 12px; z-index: 9999;">
-        Role: <?= htmlspecialchars($_SESSION['role'] ?? 'none') ?><br>
-        User ID: <?= htmlspecialchars($_SESSION['user_id'] ?? 'none') ?><br>
-        Username: <?= htmlspecialchars($_SESSION['username'] ?? 'none') ?>
-    </div>
+
 
     <header>
         <h1>Fifteen Puzzle</h1>
@@ -111,13 +106,11 @@ if (isset($_SESSION['user_id'])) {
     
 
     <div class="validators">
-        <div class="validators" style="position: fixed; bottom: 10px; right: 10px; z-index: 100;">
-            <a href="https://validator.w3.org/"><img src="./img/valid-xhtml11.png" alt="HTML Validator"></a>
-            <a href="https://jigsaw.w3.org/css-validator/"><img src="./img/valid-css.png" alt="CSS Validator"></a>
-            <a href="https://jslint.com/">
-                <img src="./img/valid-jslint.png" alt="JSLint Validator" style="width:100px; height:42px;">
-            </a>
-        </div>
+        <a href="https://validator.w3.org/"><img src="./img/valid-xhtml11.png" alt="HTML Validator"></a>
+        <a href="https://jigsaw.w3.org/css-validator/"><img src="./img/valid-css.png" alt="CSS Validator"></a>
+        <a href="https://jslint.com/">
+            <img src="./img/valid-jslint.png" alt="JSLint Validator">
+        </a>
     </div>
     <div id="win-message">
         🎉 Congratulations, Puzzle solved! 🎉
