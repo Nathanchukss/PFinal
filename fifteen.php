@@ -119,10 +119,14 @@ if (isset($_SESSION['user_id'])) {
             </a>
         </div>
     </div>
-    <div id="win-message" style="display: none;">
-        <p>🎉 Congratulations, Puzzle solved! 🎉</p>
-        <button onclick="shuffle()" style="margin-right: 10px;">Play Again</button>
-        <button onclick="hideWinMessage()">Close</button>
+    <div id="win-message">
+        <div class="win-content">
+            <p>🎉 Congratulations, Puzzle solved! 🎉</p>
+            <div class="win-actions">
+                <button id="play-again-btn">🔁 Play Again</button>
+                <button id="close-win-btn">❌ Close</button>
+            </div>
+        </div>
     </div>
 </body>
 </html>

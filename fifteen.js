@@ -165,3 +165,10 @@ function sendGameStats(timeTaken, movesCount, backgroundPath) {
     })
   });
 }
+
+function hideWinMessage() {
+  document.getElementById("win-message").style.display = "none";
+}
+
+window.shuffle = shuffle;
+window.hideWinMessage = hideWinMessage;
