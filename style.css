@@ -1,320 +1,289 @@
-/*
-
-*/
 /* ================================================
-   Homework and Project writeup shared style sheet
+   Modern Fifteen Puzzle Game Styles
 =================================================== */
 
-a img {
-  border: none;
+/* Reset and base styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 body {
-  font-family: "Times New Roman", serif;
-  font-size: 12pt;
-  background-color: white;
-  color: black;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: #333;
+  min-height: 100vh;
 }
 
-.boxed {
-  border: 1px solid black;
+/* Navigation */
+nav {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+  padding: 15px 0;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
 }
 
-code,pre,samp,tt {
-  font-family: "Courier New", monospace;
-  font-size: 95%;
+nav ul {
+  list-style: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 25px;
+  margin: 0;
+  padding: 0;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
-.correction {
-  background-color: yellow;
-}
 
-.credit {
-  font-style: italic;
-  margin-bottom: 1.5em;
-  text-align: center;
-}
 
-div#appearancedetails p.clear {
-  clear: right;
-}
-
-div.sample {
-  float: left;
-  margin: 12px;
-}
-
-.grades {
-  padding-right: 50px;
-}
-
-h1 {
-  font-size: 16pt;
-  text-align: center;
-  line-height: 1.1em;
-  padding-bottom: 10px;
-}
-
-h2 {
-  font-size: 14pt;
-}
-
-h3 {
-  font-family: "Arial", sans-serif;
-  font-size: 10pt;
-  margin: 0px;
-  text-align: center;
-}
-
-h4 {
-  font-family: "Arial", sans-serif;
-  font-size: 11pt;
-  margin: 0px;
-  margin-top: 1em;
-  padding: 0px;
-}
-
-h1,h2 {
-  font-family: "Arial", sans-serif;
-  margin-top: 18px;
-  margin-bottom: 0px;
-  clear: both;
-}
-
-.highlighted {
-  background-color: #FFEEEE;
-}
-
-hr.outputseparator {
-  color: black;
-  background-color: black;
-  height: 15px;
-  margin: 0px;
-}
-
-.vr {
-  height: 750px;
-  width: 10px;
-  background-color: black;
-}
-
-img.sample {
-  text-align: center;
-}
-
-img.right {
-  float: right;
-  margin-left: 10px;
-}
-
-li ul, li {
-  margin-top: 0px;
-  margin-bottom: 0px;
-  padding-top: 0px;
-  padding-bottom: 0px;
-  text-align: justify;
-}
-
-li.horizontal {
-  display: inline;
-  margin-right: 3em;
-}
-
-.longcode {
-  font-size: smaller;
-}
-
-.outputimagelist {
-  list-style-type: none;
-  padding-left: 0em;
-}
-
-.outputimagelist li, .outputimagelist li img {
-  margin-bottom: 0px;
-  margin-top: 0px;
-  padding-bottom: 0px;
-  padding-top: 0px;
-  text-align: center;
-  vertical-align: bottom;
-}
-
-p {
-  margin-bottom: 8px;
-  margin-top: 8px;
-  page-break-inside: avoid;
-  text-align: justify;
-}
-
-p.acknowledgement {
-  font-style: italic;
-  margin-top: 0px;
-  margin-bottom: 16px;
-  text-align: center;
-}
-
-.expectedoutput {
-  text-align: center;
-  line-height: 0em;
-  padding: 0px;
-  margin: 0px;
-}
-
-.expectedoutput img {
-  margin: 0px;
-  padding: 0px;
-  border: 0px;
-  vertical-align: top;
-}
-
-pre, code, samp {
-  font-family: "Courier New", monospace;
-}
-
-pre em {
-  background-color: #FFFFAA;
-}
-
-pre em, code em {
-  color: #660000;
-  font-style: normal;
-  font-weight: bold;
-}
-
-.rightfigure {
-  float: right;
-  margin-left: 1em;
-}
-
-.w3c {
-  float: right;
-  margin-left: 1em;
-}
-
-.subheading {
-  font-size: smaller;
-}
-
-ul {
-  margin-top: 9px;
-}
-
-ul p {
-  margin-top: 3px;
-  margin-bottom: 3px;
-}
-
-.split {
-  text-align: center;
-}
-
-.split li {
-  display: inline;
-}
-
-.split li img {
-  max-width: 45%;
-}
-
-.split li .outputseparator {
-  display: inline;
-  height: 100px;
-  vertical-align: middle;
-  width: 15px;
-}
-
-.subheading {
-  font-size: 80%;
-}
-
-.syntaxtemplate {
-  color: #660000;
-  font-family: "Arial", sans-serif;
-  font-style: italic;
-}
-
-.paramtable {
-  border-collapse: collapse;
-  caption-side: top;
-  margin: 0.5em auto 0.5em auto;
-  min-width: 40%;
-}
-
-.paramtable caption {
-  text-align: center;
-  margin: 0em auto;
-}
-
-.paramtable td, .paramtable th {
-  border: 1px solid gray;
-  padding: 0.25em;
-}
-
-.url {
-  font-family: Garamond, serif;
-  color: #000066;
-}
-
-pre {
-  background-color: #F8F8FF;
-  border: 1px dashed blue;
-  padding: 0.2em 0.5em;
-}
-
-/* ==========================================
-   My own Fifteen Puzzle Specific Styles
-========================================== */
-
-#puzzlearea {
-  width: 400px;
-  height: 400px;
-  margin: 0 auto 20px;
+/* Navigation button styles */
+.nav-btn {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  padding: 12px 24px;
+  border-radius: 25px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
   position: relative;
-  border: 4px solid black;
   overflow: hidden;
 }
 
+.nav-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+}
+
+.nav-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+.nav-btn:hover::before {
+  left: 100%;
+}
+
+/* Admin Panel button */
+.admin-btn {
+  background: linear-gradient(135deg, #2ecc71, #27ae60);
+  box-shadow: 0 4px 15px rgba(46, 204, 113, 0.3);
+}
+
+.admin-btn:hover {
+  box-shadow: 0 6px 20px rgba(46, 204, 113, 0.4);
+}
+
+/* Upload Image button */
+.upload-btn {
+  background: linear-gradient(135deg, #3498db, #2980b9);
+  box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+}
+
+.upload-btn:hover {
+  box-shadow: 0 6px 20px rgba(52, 152, 219, 0.4);
+}
+
+/* Preferences button */
+.preferences-btn {
+  background: linear-gradient(135deg, #9b59b6, #8e44ad);
+  box-shadow: 0 4px 15px rgba(155, 89, 182, 0.3);
+}
+
+.preferences-btn:hover {
+  box-shadow: 0 6px 20px rgba(155, 89, 182, 0.4);
+}
+
+/* Logout button */
+.logout-btn {
+  background: linear-gradient(135deg, #e74c3c, #c0392b);
+  box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
+}
+
+.logout-btn:hover {
+  box-shadow: 0 6px 20px rgba(231, 76, 60, 0.4);
+}
+
+/* Main container */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* Header */
+header {
+  text-align: center;
+  margin: 40px 0;
+}
+
+header h1 {
+  font-size: 3.5rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 10px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Intro section */
+.intro {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  padding: 30px;
+  margin: 30px auto;
+  max-width: 800px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  font-size: 1.1rem;
+  line-height: 1.8;
+  color: #555;
+}
+
+/* Image selector */
+form {
+  text-align: center;
+  margin: 30px 0;
+}
+
+form label {
+  font-weight: 600;
+  color: #333;
+  margin-right: 15px;
+  font-size: 1.1rem;
+}
+
+#bg-select {
+  padding: 12px 20px;
+  border: 2px solid #ddd;
+  border-radius: 25px;
+  font-size: 1rem;
+  background: white;
+  color: #333;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 200px;
+}
+
+#bg-select:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+/* Puzzle area */
+#puzzlearea {
+  width: 400px;
+  height: 400px;
+  margin: 30px auto;
+  position: relative;
+  border: 4px solid #333;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+  background: #f8f9fa;
+}
+
+/* Puzzle pieces */
 .puzzlepiece {
   width: 100px;
   height: 100px;
-  border: 2px solid black;
+  border: 2px solid #333;
   position: absolute;
-  font-size: 16pt;
+  font-size: 1.2rem;
   line-height: 100px;
   text-align: center;
   background-size: 400px 400px;
   background-repeat: no-repeat;
   font-weight: bold;
-  color: black;
+  color: white;
   cursor: pointer;
   user-select: none;
-  font-family: "Arial", sans-serif;
-  transition: all 0.2s ease-in-out;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  transition: all 0.3s ease;
   box-sizing: border-box;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+  border-radius: 8px;
 }
 
+.puzzlepiece:hover {
+  transform: scale(1.02);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
 
 .movablepiece {
-  border-color: red;
-  color: #006600;
+  border-color: #2ecc71;
+  color: #2ecc71;
   text-decoration: underline;
+  box-shadow: 0 0 15px rgba(46, 204, 113, 0.5);
 }
 
+.movablepiece:hover {
+  border-color: #27ae60;
+  box-shadow: 0 0 20px rgba(46, 204, 113, 0.7);
+}
+
+/* Controls */
 .controls {
   text-align: center;
-  margin-top: 10px;
+  margin-top: 20px;
 }
 
-.validators {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  margin-top: 30px;
+#shufflebutton {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  border: none;
+  padding: 15px 40px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+  margin: 20px 0;
 }
 
-.validators img {
-  height: 40px;
+#shufflebutton:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 35px rgba(102, 126, 234, 0.4);
 }
 
+#shufflebutton:active {
+  transform: translateY(-1px);
+}
+
+/* History section */
+.history {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  padding: 30px;
+  margin: 40px auto;
+  max-width: 800px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  font-style: italic;
+  color: #666;
+  line-height: 1.8;
+  text-align: center;
+}
+
+/* Win message */
 #win-message {
   display: none;
   position: fixed;
@@ -322,58 +291,211 @@ pre {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(255, 255, 255, 0.9);
-  color: darkgreen;
-  font-size: 32pt;
+  background: rgba(0, 0, 0, 0.8);
+  color: #2ecc71;
+  font-size: 2.5rem;
   font-weight: bold;
   justify-content: center;
   align-items: center;
   z-index: 9999;
+  backdrop-filter: blur(5px);
+  animation: fadeIn 0.5s ease-in-out;
 }
 
-/* forms style */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Validators */
+.validators {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 100;
+  display: flex;
+  gap: 10px;
+  background: rgba(255, 255, 255, 0.9);
+  padding: 10px;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.validators img {
+  height: 35px;
+  transition: transform 0.3s ease;
+}
+
+.validators img:hover {
+  transform: scale(1.1);
+}
+
+/* Form styles for login/register */
 .auth-form {
-  max-width: 400px;
-  margin: 40px auto;
-  padding: 20px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  background-color: #fafafa;
-  font-family: Arial, sans-serif;
+  max-width: 450px;
+  margin: 60px auto;
+  padding: 40px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .auth-form h2 {
   text-align: center;
   color: #333;
+  margin-bottom: 30px;
+  font-size: 2rem;
+  font-weight: 600;
 }
 
 .auth-form input[type="text"],
 .auth-form input[type="email"],
 .auth-form input[type="password"] {
   width: 100%;
-  padding: 10px;
-  margin: 8px 0;
-  border-radius: 4px;
-  border: 1px solid #bbb;
+  padding: 15px 20px;
+  margin: 10px 0;
+  border-radius: 10px;
+  border: 2px solid #ddd;
   box-sizing: border-box;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.auth-form input:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
 }
 
 .auth-form button {
   width: 100%;
-  background-color: #2ecc71;
+  background: linear-gradient(135deg, #2ecc71, #27ae60);
   color: white;
-  padding: 10px;
+  padding: 15px;
   border: none;
-  border-radius: 4px;
-  font-weight: bold;
+  border-radius: 10px;
+  font-weight: 600;
   cursor: pointer;
+  font-size: 1.1rem;
+  transition: all 0.3s ease;
+  margin-top: 20px;
 }
 
 .auth-form button:hover {
-  background-color: #27ae60;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(46, 204, 113, 0.3);
 }
 
 .auth-form p {
   text-align: center;
-  margin-top: 10px;
+  margin-top: 20px;
+  color: #666;
+}
+
+.auth-form a {
+  color: #667eea;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.auth-form a:hover {
+  text-decoration: underline;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  body {
+    font-size: 14px;
+  }
+  
+  header h1 {
+    font-size: 2.5rem;
+  }
+  
+  nav ul {
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  #puzzlearea {
+    width: 300px;
+    height: 300px;
+  }
+  
+  .puzzlepiece {
+    width: 75px;
+    height: 75px;
+    line-height: 75px;
+    font-size: 1rem;
+  }
+  
+  .intro, .history {
+    margin: 20px;
+    padding: 20px;
+  }
+  
+  .validators {
+    bottom: 10px;
+    right: 10px;
+    padding: 5px;
+  }
+  
+  .validators img {
+    height: 25px;
+  }
+}
+
+@media (max-width: 480px) {
+  header h1 {
+    font-size: 2rem;
+  }
+  
+  #puzzlearea {
+    width: 250px;
+    height: 250px;
+  }
+  
+  .puzzlepiece {
+    width: 62.5px;
+    height: 62.5px;
+    line-height: 62.5px;
+    font-size: 0.9rem;
+  }
+  
+  .auth-form {
+    margin: 20px;
+    padding: 20px;
+  }
+}
+
+/* Utility classes */
+.text-center {
+  text-align: center;
+}
+
+.mt-20 {
+  margin-top: 20px;
+}
+
+.mb-20 {
+  margin-bottom: 20px;
+}
+
+.hidden {
+  display: none;
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Focus styles for accessibility */
+button:focus,
+input:focus,
+select:focus {
+  outline: 2px solid #667eea;
+  outline-offset: 2px;
 }

@@ -43,18 +43,22 @@ if (isset($_SESSION['user_id'])) {
   <script src="fifteen.js" defer></script>
 </head>
 <body>
-    <nav style="background: #333; padding: 12px;">
-        <ul style="list-style: none; display: flex; justify-content: center; gap: 20px; margin: 0; padding: 0;">
+    <nav>
+        <ul>
+            <!-- Debug info -->
+            <li style="color: white; font-size: 12px; margin-right: 20px;">
+                Role: <?= htmlspecialchars($_SESSION['role'] ?? 'none') ?>
+            </li>
 
-            <?php if ($_SESSION['role'] === 'admin'): ?>
-                <li><a href="admin.php" style="background: #2ecc71; color: #fff; padding: 8px 20px; border-radius: 5px; text-decoration: none;">Admin Panel</a></li>
+            <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin'): ?>
+                <li><a href="admin.php" class="nav-btn admin-btn">Admin Panel</a></li>
             <?php endif; ?>
 
-            <li><a href="upload_image.php" style="background: #3498db; color: #fff; padding: 6px 16px; border-radius: 5px; text-decoration: none;">Upload Image</a></li>
+            <li><a href="upload_image.php" class="nav-btn upload-btn">Upload Image</a></li>
 
-            <li><a href="preferences.php" style="background: #9b59b6; color: #fff; padding: 6px 16px; border-radius: 5px; text-decoration: none;">Preferences</a></li>
+            <li><a href="preferences.php" class="nav-btn preferences-btn">Preferences</a></li>
 
-            <li><a href="logout.php" style="background: #e74c3c; color: #fff; padding: 8px 20px; border-radius: 5px; text-decoration: none;">Logout</a></li>
+            <li><a href="logout.php" class="nav-btn logout-btn">Logout</a></li>
 
         </ul>
     </nav>
