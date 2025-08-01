@@ -9,6 +9,10 @@ window.onload = function () {
   let blankY = 300;
   let gameStarted = false;
 
+  const winMessage = document.getElementById("win-message");
+  const playAgainBtn = document.getElementById("play-again-btn");
+  const closeWinBtn = document.getElementById("close-win-btn");
+
   let count = 1;
   for (let row = 0; row < 4; row++) {
     for (let col = 0; col < 4; col++) {
@@ -24,7 +28,7 @@ window.onload = function () {
         tile.style.top = y + "px";
         tile.style.backgroundPosition = `-${x}px -${y}px`;
         tile.style.backgroundSize = "400px 400px";
-        tile.style.backgroundImage = "url('img/background.jpg')"; // default
+        tile.style.backgroundImage = "url('img/background.jpg')"; // Default background
         tile.style.position = "absolute";
         tile.style.cursor = "pointer";
 
@@ -62,8 +66,21 @@ window.onload = function () {
       changeBackground(this.value);
     });
 
-    // Set initial background on load
     changeBackground(dropdown.value);
+  }
+
+  // Button handlers inside win message
+  if (playAgainBtn) {
+    playAgainBtn.addEventListener("click", () => {
+      hideWinMessage();
+      shuffle();
+    });
+  }
+
+  if (closeWinBtn) {
+    closeWinBtn.addEventListener("click", () => {
+      hideWinMessage();
+    });
   }
 
   function isMovable(tile) {
@@ -103,7 +120,7 @@ window.onload = function () {
     gameStarted = true;
     moveCount = 0;
     startTime = Date.now();
-    document.getElementById("win-message").style.display = "none";
+    winMessage.style.display = "none";
 
     if (dropdown) changeBackground(dropdown.value); // reapply background
   }
@@ -125,15 +142,15 @@ window.onload = function () {
     });
 
     if (isSolved && blankX === 300 && blankY === 300) {
-      document.getElementById("win-message").style.display = "flex";
+      winMessage.style.display = "flex";
 
       const timeTaken = Math.floor((Date.now() - startTime) / 1000);
       const bgDropdown = document.getElementById("bg-select");
       const backgroundPath = bgDropdown ? bgDropdown.value : "";
 
       sendGameStats(timeTaken, moveCount, backgroundPath);
-    }else {
-      document.getElementById("win-message").style.display = "none";
+    } else {
+      winMessage.style.display = "none";
     }
   }
 };
@@ -169,6 +186,3 @@ function sendGameStats(timeTaken, movesCount, backgroundPath) {
 function hideWinMessage() {
   document.getElementById("win-message").style.display = "none";
 }
-
-window.shuffle = shuffle;
-window.hideWinMessage = hideWinMessage;
