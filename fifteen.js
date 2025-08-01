@@ -8,10 +8,28 @@ window.onload = function () {
   let blankX = 300;
   let blankY = 300;
   let gameStarted = false;
+  const userPrefs = typeof USER_PREFS !== 'undefined' ? USER_PREFS : {
+    size: "4x4",
+    background: "",
+    sound: true,
+    animations: true
+  };
 
   const winMessage = document.getElementById("win-message");
   const playAgainBtn = document.getElementById("play-again-btn");
   const closeWinBtn = document.getElementById("close-win-btn");
+
+  // Sound support
+  const moveSound = new Audio("sounds/move.mp3");
+  const winSound = new Audio("sounds/win.mp3");
+  let soundEnabled = true;
+  const soundToggle = document.getElementById("sound-toggle");
+  if (soundToggle) {
+    soundEnabled = soundToggle.checked;
+    soundToggle.addEventListener("change", () => {
+      soundEnabled = soundToggle.checked;
+    });
+  }
 
   let count = 1;
   for (let row = 0; row < 4; row++) {
@@ -28,7 +46,7 @@ window.onload = function () {
         tile.style.top = y + "px";
         tile.style.backgroundPosition = `-${x}px -${y}px`;
         tile.style.backgroundSize = "400px 400px";
-        tile.style.backgroundImage = "url('img/background.jpg')"; // Default background
+        tile.style.backgroundImage = "url('img/background.jpg')";
         tile.style.position = "absolute";
         tile.style.cursor = "pointer";
 
@@ -65,11 +83,9 @@ window.onload = function () {
     dropdown.addEventListener("change", function () {
       changeBackground(this.value);
     });
-
     changeBackground(dropdown.value);
   }
 
-  // Button handlers inside win message
   if (playAgainBtn) {
     playAgainBtn.addEventListener("click", () => {
       hideWinMessage();
@@ -103,6 +119,8 @@ window.onload = function () {
 
     checkIfSolved();
     moveCount++;
+
+    if (soundEnabled) moveSound.play();
   }
 
   function shuffle() {
@@ -122,7 +140,7 @@ window.onload = function () {
     startTime = Date.now();
     winMessage.style.display = "none";
 
-    if (dropdown) changeBackground(dropdown.value); // reapply background
+    if (dropdown) changeBackground(dropdown.value);
   }
 
   function checkIfSolved() {
@@ -149,6 +167,7 @@ window.onload = function () {
       const backgroundPath = bgDropdown ? bgDropdown.value : "";
 
       sendGameStats(timeTaken, moveCount, backgroundPath);
+      if (soundEnabled) winSound.play();
     } else {
       winMessage.style.display = "none";
     }
@@ -184,5 +203,6 @@ function sendGameStats(timeTaken, movesCount, backgroundPath) {
 }
 
 function hideWinMessage() {
-  document.getElementById("win-message").style.display = "none";
+  const winMessage = document.getElementById("win-message");
+  if (winMessage) winMessage.style.display = "none";
 }
