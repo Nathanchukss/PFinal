@@ -2,26 +2,41 @@
 session_start();
 require 'db.php';
 
+// Ensure the user is logged in
+if (!isset($_SESSION["user_id"])) {
+    http_response_code(401);
+    echo json_encode(["error" => "You must be logged in."]);
+    exit;
+}
+
+// Decode JSON input sent via fetch()
 $data = json_decode(file_get_contents("php://input"), true);
 
-if (!isset($_SESSION["user_id"])) exit;
+// Extract values safely
+$user_id     = $_SESSION["user_id"];
+$time_taken  = intval($data["time_taken"] ?? 0);
+$moves       = intval($data["moves"] ?? 0);
+$win         = !empty($data["win"]) ? 1 : 0;
+$bgPath      = basename($data["background"] ?? ""); // strip path, just filename
 
-$user_id = $_SESSION["user_id"];
-$time_taken = intval($data["time_taken"] ?? 0);
-$moves = intval($data["moves"] ?? 0);
-$win = $data["win"] ? 1 : 0;
-$bgPath = basename($data["background"]); // get file name only
+// Lookup background_image_id from filename
+$bg_id = null;
+if ($bgPath !== "") {
+    $stmt = $pdo->prepare("SELECT image_id FROM background_images WHERE filename = ?");
+    $stmt->execute([$bgPath]);
+    $row = $stmt->fetch();
+    if ($row) {
+        $bg_id = $row["image_id"];
+    }
+}
 
-// Get background image ID
-$stmt = $pdo->prepare("SELECT image_id FROM background_images WHERE filename = ?");
-$stmt->execute([$bgPath]);
-$bgRow = $stmt->fetch();
-$bg_id = $bgRow ? $bgRow["image_id"] : null;
-
-// Insert game stat
-$stmt = $pdo->prepare("INSERT INTO game_stats (user_id, time_taken_seconds, moves_count, win_status, background_image_id)
-                       VALUES (?, ?, ?, ?, ?)");
+// Insert the game stats
+$stmt = $pdo->prepare("
+    INSERT INTO game_stats (user_id, time_taken_seconds, moves_count, win_status, background_image_id)
+    VALUES (?, ?, ?, ?, ?)
+");
 $stmt->execute([$user_id, $time_taken, $moves, $win, $bg_id]);
 
-echo "Saved!";
+// Respond with success
+echo json_encode(["success" => true]);
 ?>
