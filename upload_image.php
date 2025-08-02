@@ -50,10 +50,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['bg_image'])) {
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Upload Image - Fifteen Puzzle</title>
   <link rel="stylesheet" href="style.css">
-  <style>
-    /* Embedded upload styles preserved here... */
-    /* — (omitted for brevity since you already have them) — */
-  </style>
 </head>
 <body>
   <div class="upload-container">
@@ -82,7 +78,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['bg_image'])) {
       <form method="POST" enctype="multipart/form-data" class="upload-form">
         <!-- Custom Display Name Input -->
         <input type="text" name="display_name" placeholder="Enter display name for puzzle image" 
-               style="padding: 12px; width: 100%; border-radius: 10px; border: 2px solid #ccc; margin-bottom: 20px;" />
+               style="padding: 12px; width: 100%; border-radius: 10px; border: 2px solid #ccc; margin-bottom: 20px; box-sizing: border-box;" />
 
         <div class="file-upload-area" onclick="document.getElementById('bg_image').click()">
           <div class="upload-icon">📁</div>
