@@ -88,8 +88,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <label>Password:</label>
   <input type="password" name="password" required>
 
-  <label><input type="checkbox" name="remember"> Remember Me</label>
-
   <button type="submit">Login</button>
   <p>New here? <a href="register.php">Create an account</a></p>
 </form>
