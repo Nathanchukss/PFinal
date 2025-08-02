@@ -1,7 +1,7 @@
 "use strict";
 
 window.onload = function () {
-  // After shuffle, cheat is allowed until the first manual move
+  // After shuffle, cheat is allowed until used
   let canUseCheat   = false;
   let cheatUsed     = false; // block fake wins
 
@@ -15,7 +15,7 @@ window.onload = function () {
   let startTime      = null;
   let gameStarted    = false;
   let timerInterval  = null;
-  let shuffleHistory = [];
+  let moveHistory    = [];     // ← unified history of all moves (shuffle + user)
 
   // DOM refs
   const puzzleArea   = document.getElementById("puzzlearea");
@@ -29,6 +29,8 @@ window.onload = function () {
   // Audio & UI prefs
   const soundEnabled      = (typeof USER_PREFS !== "undefined" && USER_PREFS.sound)      || false;
   const animationsEnabled = (typeof USER_PREFS !== "undefined" && USER_PREFS.animations) || false;
+  const delay      = animationsEnabled ? 100 : 0;
+  const cheatDelay      = animationsEnabled ? 25 : 0;
   const moveSound  = new Audio("sounds/move.mp3");
   const winSound   = new Audio("sounds/win.mp3");
   const againSound = new Audio("sounds/again.mp3");
@@ -84,7 +86,7 @@ window.onload = function () {
     // must share a row or column
     if (dx !== 0 && dy !== 0) return [];
 
-    // how many steps away?
+    // how many steps away
     const steps = dx !== 0
       ? Math.abs(dx / tileSize)
       : Math.abs(dy / tileSize);
@@ -94,7 +96,7 @@ window.onload = function () {
     const dirY = dy === 0 ? 0 : dy > 0 ? 1 : -1;
     const path = [];
 
-    // collect each tile from blank → clicked
+    // collect each tile from blank to clicked
     for (let i = 1; i <= steps; i++) {
       const px = blankX + dirX * tileSize * i;
       const py = blankY + dirY * tileSize * i;
@@ -110,7 +112,6 @@ window.onload = function () {
 
   // Core move & check helpers
   function isMovable(tile) {
-    // still used for shuffle logic
     const x  = parseInt(tile.style.left, 10);
     const y  = parseInt(tile.style.top, 10);
     const dx = Math.abs(x - blankX);
@@ -118,59 +119,73 @@ window.onload = function () {
     return dx + dy === tileSize;
   }
 
-  function performMove(tile, { count, sound }) {
+  function performMove(tile, { count = false, sound = false, record = false }) {
+    // capture old coords
     const x = parseInt(tile.style.left, 10);
-    const y = parseInt(tile.style.top, 10);
+    const y = parseInt(tile.style.top,  10);
 
+    // swap into blank
     tile.style.left = blankX + "px";
     tile.style.top  = blankY + "px";
-
     blankX = x;
     blankY = y;
 
+    // record every step if asked
+    if (record) {
+      moveHistory.push(tile);
+    }
+
+    // only bump the user-move counter on the last step
     if (count) {
       moveCount++;
       moveDisplay.textContent = moveCount;
     }
+
     if (sound && soundEnabled) {
       moveSound.play();
     }
+
     if (count) checkIfSolved();
   }
 
   function shuffleMove(tile) {
-    performMove(tile, { count: false, sound: false });
+    performMove(tile, { record: true, count: false, sound: false });
   }
 
-  // Tile event listeners now support multi-slide
-  tiles.forEach(tile => {
-    tile.addEventListener("click", () => {
-      const path = getTilesToSlide(tile);
-      if (!path.length) return;
+  // multi-slide tiles (delegated events)
+  puzzleArea.addEventListener("click", event => {
+    const tile = event.target.closest(".puzzlepiece");
+    if (!gameStarted) return;
+    if (!tile) return;
 
-      if (canUseCheat) {
-        canUseCheat = false;
-        disableCheatBtn();
-      }
+    const path = getTilesToSlide(tile);
+    if (!path.length) return;
 
-      // slide each in sequence (300ms apart if animated)
-      path.forEach((t, i) => {
-        setTimeout(() => {
-          const isLast = i === path.length - 1;
-          performMove(t, { count: isLast, sound: isLast });// count every click only
-          //performMove(t, { count: true,  sound: true  });// if want to count every tile move
-        }, i * (animationsEnabled ? 300 : 0));
-      });
+    path.forEach((t, i) => {
+      setTimeout(() => {
+        const isLast = i === path.length - 1;
+        performMove(t, {
+          record: true,          // ← record every single tile move
+          count:  isLast,        // ← only count on the final step
+          sound:  isLast
+        });
+      }, i * delay);
     });
+  });
 
-    tile.addEventListener("mouseover", () => {
-      if (getTilesToSlide(tile).length) {
-        tile.classList.add("movablepiece");
-      }
-    });
-    tile.addEventListener("mouseout", () => {
+  puzzleArea.addEventListener("mouseover", event => {
+    const tile = event.target.closest(".puzzlepiece");
+    if (!tile) return;
+    if (getTilesToSlide(tile).length) {
+      tile.classList.add("movablepiece");
+    }
+  });
+
+  puzzleArea.addEventListener("mouseout", event => {
+    const tile = event.target.closest(".puzzlepiece");
+    if (tile) {
       tile.classList.remove("movablepiece");
-    });
+    }
   });
 
   // Shuffle button
@@ -191,29 +206,28 @@ window.onload = function () {
     closeWinBtn.addEventListener("click", hideWinMessage);
   }
 
-  // Cheat: undo-shuffle
+  // Cheat: undo all moves midgame
   if (cheatBtn) {
     disableCheatBtn();
     cheatBtn.addEventListener("click", () => {
-      if (!gameStarted || shuffleHistory.length === 0 || !canUseCheat) return;
-      cheatUsed = true;
+      if (!gameStarted || moveHistory.length === 0 || !canUseCheat) return;
+
+      cheatUsed   = true;
+      canUseCheat = false;    // one cheat per game
       disableCheatBtn();
 
-      let idx = shuffleHistory.length - 1;
+      let idx = moveHistory.length - 1;
       (function step() {
-        if (idx < 0) {
-          enableCheatBtn();
-          return;
-        }
-        shuffleMove(shuffleHistory[idx--]);
-        setTimeout(step, 100);
+        if (idx < 0) return;
+        shuffleMove(moveHistory[idx--]);
+        setTimeout(step, cheatDelay);
       })();
     });
   }
 
   // Main shuffle routine
   function shuffle() {
-    shuffleHistory = [];
+    moveHistory    = [];          // clear all past moves
     gameStarted    = true;
     moveCount      = 0;
     moveDisplay.textContent = "0";
@@ -221,8 +235,8 @@ window.onload = function () {
     clearInterval(timerInterval);
     timerInterval = setInterval(updateTimer, 1000);
 
-    cheatUsed   = false;
-    canUseCheat = true;
+    cheatUsed      = false;
+    canUseCheat    = true;
     enableCheatBtn();
 
     winMessage.style.display = "none";
@@ -233,7 +247,6 @@ window.onload = function () {
     while (moves--) {
       const movable = tiles.filter(isMovable);
       const pick    = movable[Math.floor(Math.random() * movable.length)];
-      shuffleHistory.push(pick);
       shuffleMove(pick);
     }
   }
@@ -289,12 +302,12 @@ window.onload = function () {
 
   // Cheat-button styling
   function disableCheatBtn() {
-    cheatBtn.disabled     = true;
+    cheatBtn.disabled      = true;
     cheatBtn.style.opacity = "0.5";
     cheatBtn.style.cursor  = "not-allowed";
   }
   function enableCheatBtn() {
-    cheatBtn.disabled     = false;
+    cheatBtn.disabled      = false;
     cheatBtn.style.opacity = "1";
     cheatBtn.style.cursor  = "pointer";
     cheatBtn.style.display = "";
@@ -306,22 +319,6 @@ window.onload = function () {
 };
 
 // Helpers outside onload
-function changeBackground(imagePath) {
-  const tiles    = document.querySelectorAll(".puzzlepiece");
-  const gridSize = Math.sqrt(tiles.length + 1);
-  const tileSize = 400 / gridSize;
-
-  tiles.forEach((tile, i) => {
-    const x = (i % gridSize) * tileSize;
-    const y = Math.floor(i / gridSize) * tileSize;
-    tile.style.backgroundImage    = imagePath
-      ? `url('${imagePath}')`
-      : "url('img/background.jpg')";
-    tile.style.backgroundSize     = "400px 400px";
-    tile.style.backgroundPosition = `-${x}px -${y}px`;
-  });
-}
-
 function sendGameStats(timeTaken, movesCount, backgroundPath) {
   fetch("save_game_stats.php", {
     method: "POST",
@@ -342,4 +339,20 @@ function sendGameStats(timeTaken, movesCount, backgroundPath) {
 
 function hideWinMessage() {
   document.getElementById("win-message").style.display = "none";
+}
+
+function changeBackground(imagePath) {
+  const tiles    = document.querySelectorAll(".puzzlepiece");
+  const gridSize = Math.sqrt(tiles.length + 1);
+  const tileSize = 400 / gridSize;
+
+  tiles.forEach((tile, i) => {
+    const x = (i % gridSize) * tileSize;
+    const y = Math.floor(i / gridSize) * tileSize;
+    tile.style.backgroundImage    = imagePath
+      ? `url('${imagePath}')`
+      : "url('img/background.jpg')";
+    tile.style.backgroundSize     = "400px 400px";
+    tile.style.backgroundPosition = `-${x}px -${y}px`;
+  });
 }
