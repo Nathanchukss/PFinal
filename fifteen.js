@@ -157,7 +157,8 @@ window.onload = function () {
       path.forEach((t, i) => {
         setTimeout(() => {
           const isLast = i === path.length - 1;
-          performMove(t, { count: isLast, sound: isLast });
+          performMove(t, { count: isLast, sound: isLast });// count every click only
+          //performMove(t, { count: true,  sound: true  });// if want to count every tile move
         }, i * (animationsEnabled ? 300 : 0));
       });
     });
