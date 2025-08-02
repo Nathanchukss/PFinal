@@ -40,18 +40,26 @@ nav ul {
   max-width: 1200px;
   margin: 0 auto;
   height: 70px;
+  width: 100%;
 }
 
 nav ul li {
   position: relative;
   height: 100%;
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  max-width: 200px;
+  min-width: 0;
 }
 
 /* Navigation button styles */
 nav ul li a.nav-btn {
   background: transparent;
   color: #e8e8e8 !important;
-  padding: 0 30px;
+  padding: 0;
   text-decoration: none !important;
   font-weight: 500;
   font-size: 14px;
@@ -60,10 +68,19 @@ nav ul li a.nav-btn {
   position: relative;
   display: flex;
   align-items: center;
+  justify-content: center;
   height: 100%;
+  width: 100%;
   cursor: pointer;
   border-right: 1px solid rgba(255, 255, 255, 0.1);
   text-transform: uppercase;
+  text-align: center;
+  white-space: nowrap;
+  min-width: 0;
+  box-sizing: border-box;
+  overflow: hidden;
+  line-height: 1;
+  margin: 0;
 }
 
 nav ul li:last-child a.nav-btn {
@@ -110,6 +127,9 @@ nav ul li a.nav-btn.admin-btn::before {
 /* Upload Image button */
 nav ul li a.nav-btn.upload-btn {
   color: #60a5fa !important;
+  text-align: center !important;
+  justify-content: center !important;
+  align-items: center !important;
 }
 
 nav ul li a.nav-btn.upload-btn:hover {
@@ -165,12 +185,9 @@ header {
 header h1 {
   font-size: 3.5rem;
   font-weight: 700;
-  background: linear-gradient(135deg, #667eea, #764ba2);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: #1e293b;
   margin-bottom: 10px;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
 /* Intro section */
@@ -298,6 +315,31 @@ form label {
 
 #shufflebutton:active {
   transform: translateY(-1px);
+}
+
+/* Cheat button styling */
+#cheat-button {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  color: white;
+  border: none;
+  padding: 12px 30px;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 6px 20px rgba(245, 158, 11, 0.3);
+  margin: 10px;
+}
+
+#cheat-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(245, 158, 11, 0.4);
+  background: linear-gradient(135deg, #fbbf24, #f59e0b);
+}
+
+#cheat-button:active {
+  transform: translateY(0);
 }
 
 /* History section */
@@ -436,6 +478,481 @@ form label {
   text-decoration: underline;
 }
 
+/* ================================================
+   Admin Panel Styles
+=================================================== */
+
+/* Admin page container */
+.admin-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* Admin header */
+.admin-header {
+  text-align: center;
+  margin: 30px 0;
+}
+
+.admin-header h1 {
+  font-size: 3rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 20px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.admin-header p {
+  color: #333;
+  font-size: 1.1rem;
+  font-weight: 500;
+  margin-bottom: 25px;
+}
+
+.admin-header a {
+  color: #1e293b;
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  padding: 8px 16px;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 8px;
+  border: 2px solid #1e293b;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.admin-header a:hover {
+  color: #ffffff;
+  background: #1e293b;
+  border-color: #1e293b;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Admin sections */
+.admin-section {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  padding: 30px;
+  margin: 30px 0;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.admin-section h2 {
+  color: #333;
+  font-size: 1.8rem;
+  font-weight: 600;
+  margin-bottom: 25px;
+  padding-bottom: 15px;
+  border-bottom: 3px solid #a78bfa;
+  display: inline-block;
+}
+
+/* Admin tables */
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+  background: white;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.admin-table th {
+  background: linear-gradient(135deg, #a78bfa, #8b5cf6);
+  color: white;
+  padding: 15px 12px;
+  text-align: left;
+  font-weight: 600;
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.admin-table td {
+  padding: 12px;
+  border-bottom: 1px solid #eee;
+  vertical-align: middle;
+}
+
+.admin-table tr:hover {
+  background: rgba(167, 139, 250, 0.05);
+}
+
+.admin-table tr:last-child td {
+  border-bottom: none;
+}
+
+/* Admin table images */
+.admin-table img {
+  max-height: 60px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+.admin-table img:hover {
+  transform: scale(1.1);
+}
+
+/* Admin buttons */
+.admin-btn {
+  background: linear-gradient(135deg, #a78bfa, #8b5cf6);
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin: 2px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.admin-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(167, 139, 250, 0.3);
+}
+
+.admin-btn.danger {
+  background: linear-gradient(135deg, #f87171, #ef4444);
+}
+
+.admin-btn.danger:hover {
+  box-shadow: 0 4px 12px rgba(248, 113, 113, 0.3);
+}
+
+.admin-btn.warning {
+  background: linear-gradient(135deg, #fbbf24, #f59e0b);
+}
+
+.admin-btn.warning:hover {
+  box-shadow: 0 4px 12px rgba(251, 191, 36, 0.3);
+}
+
+/* Status indicators */
+.status-active {
+  color: #22c55e;
+  font-weight: 600;
+}
+
+.status-inactive {
+  color: #ef4444;
+  font-weight: 600;
+}
+
+.status-admin {
+  color: #a78bfa;
+  font-weight: 600;
+}
+
+.status-player {
+  color: #60a5fa;
+  font-weight: 600;
+}
+
+/* ================================================
+   Upload Image Page Styles
+=================================================== */
+
+.upload-container {
+  max-width: 600px;
+  margin: 40px auto;
+  padding: 20px;
+}
+
+.upload-card {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  padding: 40px;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+}
+
+.upload-header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.upload-header h2 {
+  font-size: 2.2rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #60a5fa, #3b82f6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 10px;
+}
+
+.upload-header p {
+  color: #666;
+  font-size: 1.1rem;
+}
+
+/* Message styles */
+.message {
+  padding: 15px 20px;
+  border-radius: 10px;
+  margin: 20px 0;
+  font-weight: 600;
+  text-align: center;
+}
+
+.message.success {
+  background: rgba(74, 222, 128, 0.1);
+  color: #22c55e;
+  border: 2px solid #4ade80;
+}
+
+.message.error {
+  background: rgba(248, 113, 113, 0.1);
+  color: #ef4444;
+  border: 2px solid #f87171;
+}
+
+/* Requirements section */
+.requirements {
+  background: rgba(96, 165, 250, 0.05);
+  border: 2px solid rgba(96, 165, 250, 0.2);
+  border-radius: 15px;
+  padding: 20px;
+  margin: 25px 0;
+}
+
+.requirements h3 {
+  color: #3b82f6;
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 15px;
+}
+
+.requirements ul {
+  list-style: none;
+  padding: 0;
+}
+
+.requirements li {
+  padding: 8px 0;
+  color: #555;
+  position: relative;
+  padding-left: 25px;
+}
+
+.requirements li::before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  color: #4ade80;
+  font-weight: bold;
+}
+
+/* Upload form */
+.upload-form {
+  margin: 30px 0;
+}
+
+.file-upload-area {
+  border: 3px dashed #ddd;
+  border-radius: 15px;
+  padding: 40px 20px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: rgba(96, 165, 250, 0.05);
+  margin: 20px 0;
+}
+
+.file-upload-area:hover {
+  border-color: #60a5fa;
+  background: rgba(96, 165, 250, 0.1);
+}
+
+.file-upload-area.dragover {
+  border-color: #4ade80;
+  background: rgba(74, 222, 128, 0.1);
+  transform: scale(1.02);
+}
+
+.upload-icon {
+  font-size: 3rem;
+  margin-bottom: 15px;
+  color: #60a5fa;
+}
+
+.file-label {
+  display: block;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 10px;
+  cursor: pointer;
+}
+
+.file-info {
+  color: #666;
+  font-size: 0.95rem;
+}
+
+.file-input {
+  display: none;
+}
+
+.upload-btn {
+  width: 100%;
+  background: linear-gradient(135deg, #60a5fa, #3b82f6);
+  color: white;
+  border: none;
+  padding: 15px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 20px;
+}
+
+.upload-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(96, 165, 250, 0.3);
+}
+
+.upload-btn:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.back-btn {
+  display: inline-block;
+  color: #667eea;
+  text-decoration: none;
+  font-weight: 600;
+  margin-top: 20px;
+  transition: color 0.3s ease;
+}
+
+.back-btn:hover {
+  color: #5a67d8;
+}
+
+/* ================================================
+   Preferences Page Styles
+=================================================== */
+
+.preferences-container {
+  max-width: 500px;
+  margin: 40px auto;
+  padding: 20px;
+}
+
+.preferences-card {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  padding: 40px;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+}
+
+.preferences-header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.preferences-header h2 {
+  font-size: 2.2rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #a78bfa, #8b5cf6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 10px;
+}
+
+.preferences-form {
+  margin: 30px 0;
+}
+
+.preferences-form label {
+  display: block;
+  font-weight: 600;
+  color: #333;
+  margin: 20px 0 10px 0;
+  font-size: 1.1rem;
+}
+
+.preferences-form select {
+  width: 100%;
+  padding: 12px 15px;
+  border: 2px solid #ddd;
+  border-radius: 10px;
+  font-size: 1rem;
+  background: white;
+  color: #333;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.preferences-form select:focus {
+  outline: none;
+  border-color: #a78bfa;
+  box-shadow: 0 0 0 3px rgba(167, 139, 250, 0.1);
+}
+
+.preferences-form .checkbox-group {
+  margin: 20px 0;
+}
+
+.preferences-form .checkbox-group label {
+  display: flex;
+  align-items: center;
+  font-weight: 500;
+  color: #555;
+  cursor: pointer;
+  margin: 15px 0;
+}
+
+.preferences-form .checkbox-group input[type="checkbox"] {
+  margin-right: 12px;
+  width: 18px;
+  height: 18px;
+  accent-color: #a78bfa;
+}
+
+.preferences-form button {
+  width: 100%;
+  background: linear-gradient(135deg, #a78bfa, #8b5cf6);
+  color: white;
+  border: none;
+  padding: 15px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 30px;
+}
+
+.preferences-form button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(167, 139, 250, 0.3);
+}
+
+.preferences-message {
+  text-align: center;
+  margin: 20px 0;
+  padding: 15px;
+  border-radius: 10px;
+  background: rgba(74, 222, 128, 0.1);
+  color: #22c55e;
+  font-weight: 600;
+  border: 2px solid #4ade80;
+}
+
 /* Responsive design */
 @media (max-width: 768px) {
   body {
@@ -493,6 +1010,39 @@ form label {
   .validators img {
     height: 25px;
   }
+  
+  /* Admin responsive */
+  .admin-table {
+    font-size: 0.9rem;
+  }
+  
+  .admin-table th,
+  .admin-table td {
+    padding: 8px 6px;
+  }
+  
+  .admin-btn {
+    padding: 6px 12px;
+    font-size: 0.8rem;
+  }
+  
+  /* Upload responsive */
+  .upload-card {
+    padding: 20px;
+  }
+  
+  .upload-header h2 {
+    font-size: 1.8rem;
+  }
+  
+  /* Preferences responsive */
+  .preferences-card {
+    padding: 20px;
+  }
+  
+  .preferences-header h2 {
+    font-size: 1.8rem;
+  }
 }
 
 @media (max-width: 480px) {
@@ -515,6 +1065,22 @@ form label {
   .auth-form {
     margin: 20px;
     padding: 20px;
+  }
+  
+  /* Admin mobile */
+  .admin-table {
+    font-size: 0.8rem;
+  }
+  
+  .admin-table th,
+  .admin-table td {
+    padding: 6px 4px;
+  }
+  
+  .admin-btn {
+    padding: 4px 8px;
+    font-size: 0.7rem;
+    margin: 1px;
   }
 }
 
@@ -562,7 +1128,6 @@ select:focus {
   justify-content: center;
   align-items: center;
   z-index: 9999;
-  backdrop-filter: blur(5px);
 }
 
 .win-content {
