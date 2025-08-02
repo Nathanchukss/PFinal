@@ -2,7 +2,7 @@
 session_start();
 require 'db.php';
 
-// Check for cookie auto-login
+// Auto-login via cookie if user session doesn't exist
 if (!isset($_SESSION['user_id']) && isset($_COOKIE['auth_token'])) {
     $stmt = $pdo->prepare("SELECT * FROM users WHERE remember_token = ?");
     $stmt->execute([$_COOKIE['auth_token']]);
@@ -15,21 +15,25 @@ if (!isset($_SESSION['user_id']) && isset($_COOKIE['auth_token'])) {
     }
 }
 
-// Block guests
+// Redirect guests to login page
 if (!isset($_SESSION['user_id'])) {
     header("Location: login.php");
     exit();
 }
 
-// Load available backgrounds
-$bgImages = $pdo->query("SELECT * FROM background_images WHERE is_active = 1 ORDER BY upload_time DESC")->fetchAll();
+// Load available background images: only active and with valid image_url
+$bgImages = $pdo->query("
+    SELECT * FROM background_images
+    WHERE is_active = 1 AND image_url IS NOT NULL
+    ORDER BY upload_time DESC
+")->fetchAll();
 
 // Load user preferences
 $stmt = $pdo->prepare("SELECT * FROM user_preferences WHERE user_id = ?");
 $stmt->execute([$_SESSION['user_id']]);
 $prefs = $stmt->fetch();
 
-// Build image ID to filename map
+// Build a map of image_id to filename
 $imageMap = [];
 foreach ($bgImages as $img) {
     $imageMap[$img['image_id']] = $img['filename'];
@@ -43,6 +47,7 @@ foreach ($bgImages as $img) {
   <title>Fifteen Puzzle</title>
   <link rel="stylesheet" href="style.css">
   <script>
+    // Pass user preferences to JavaScript
     const USER_PREFS = {
       size: <?= json_encode($prefs['default_puzzle_size'] ?? '4x4') ?>,
       background: <?= json_encode(($prefs['preferred_background_image_id'] ?? '') ? 'uploads/' . $imageMap[$prefs['preferred_background_image_id']] : '') ?>,
@@ -53,7 +58,7 @@ foreach ($bgImages as $img) {
   <script src="fifteen.js" defer></script>
 </head>
 <body>
-  <!-- Navigation -->
+  <!-- Navigation Bar -->
   <nav>
     <ul>
       <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin'): ?>
@@ -65,19 +70,19 @@ foreach ($bgImages as $img) {
     </ul>
   </nav>
 
-  <!-- Debug Info -->
+  <!-- Debug Info Box -->
   <div style="position: fixed; top: 10px; right: 10px; background: rgba(0,0,0,0.8); color: white; padding: 10px; border-radius: 5px; font-size: 12px; z-index: 9999;">
     Role: <?= htmlspecialchars($_SESSION['role'] ?? 'none') ?><br>
     User ID: <?= htmlspecialchars($_SESSION['user_id'] ?? 'none') ?><br>
     Username: <?= htmlspecialchars($_SESSION['username'] ?? 'none') ?>
   </div>
 
-  <!-- Header -->
+  <!-- Page Header -->
   <header>
     <h1>Fifteen Puzzle</h1>
   </header>
 
-  <!-- Intro -->
+  <!-- Intro Text -->
   <section class="intro">
     <div>
       The goal of the fifteen puzzle is to un-jumble its fifteen squares
@@ -92,13 +97,13 @@ foreach ($bgImages as $img) {
     <strong>Moves:</strong> <span id="move-counter">0</span>
   </div>
 
-  <!-- Background Selector -->
+  <!-- Background Image Selector -->
   <form style="text-align:center;">
     <label for="bg-select"><strong>Select Image:</strong></label>
     <select id="bg-select" onchange="changeBackground(this.value)">
       <option value="">Default</option>
       <?php foreach ($bgImages as $bg): ?>
-        <option value="uploads/<?= htmlspecialchars($bg['filename']) ?>"
+        <option value="<?= htmlspecialchars($bg['image_url']) ?>"
           <?= (isset($prefs['preferred_background_image_id']) && $bg['image_id'] == $prefs['preferred_background_image_id']) ? 'selected' : '' ?>>
           <?= htmlspecialchars($bg['display_name'] ?: $bg['filename']) ?>
         </option>
@@ -106,20 +111,20 @@ foreach ($bgImages as $img) {
     </select>
   </form>
 
-  <!-- Puzzle Container -->
+  <!-- Puzzle Area -->
   <div>
     <div id="puzzlearea">
       <div class="controls"></div>
     </div>
   </div>
 
-  <!-- Shuffle/Cheat Buttons -->
+  <!-- Shuffle & Cheat Buttons -->
   <div style="text-align: center;">
     <button id="shufflebutton">Shuffle</button>
     <button id="cheat-button" style="display:none;">Cheat (Show Solution)</button>
   </div><br>
 
-  <!-- Puzzle History -->
+  <!-- Puzzle History Footer -->
   <section class="history">
     <div>
       American puzzle author and mathematician Sam Loyd is often falsely credited with creating the puzzle;
@@ -128,13 +133,11 @@ foreach ($bgImages as $img) {
     </div>
   </section><br>
 
-  <!-- Validator Links -->
-  <div class="validators">
-    <div class="validators" style="position: fixed; bottom: 10px; right: 10px; z-index: 100;">
-      <a href="https://validator.w3.org/"><img src="./img/valid-xhtml11.png" alt="HTML Validator"></a>
-      <a href="https://jigsaw.w3.org/css-validator/"><img src="./img/valid-css.png" alt="CSS Validator"></a>
-      <a href="https://jslint.com/"><img src="./img/valid-jslint.png" alt="JSLint Validator" style="width:100px; height:42px;"></a>
-    </div>
+  <!-- Validator Badges -->
+  <div class="validators" style="position: fixed; bottom: 10px; right: 10px; z-index: 100;">
+    <a href="https://validator.w3.org/"><img src="./img/valid-xhtml11.png" alt="HTML Validator"></a>
+    <a href="https://jigsaw.w3.org/css-validator/"><img src="./img/valid-css.png" alt="CSS Validator"></a>
+    <a href="https://jslint.com/"><img src="./img/valid-jslint.png" alt="JSLint Validator" style="width:100px; height:42px;"></a>
   </div>
 
   <!-- Win Message Modal -->
