@@ -29,17 +29,17 @@ $stmt = $pdo->prepare("SELECT * FROM user_preferences WHERE user_id = ?");
 $stmt->execute([$_SESSION['user_id']]);
 $prefs = $stmt->fetch();
 
+// Build image ID to filename map
 $imageMap = [];
 foreach ($bgImages as $img) {
     $imageMap[$img['image_id']] = $img['filename'];
 }
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Fifteen Puzzle</title>
   <link rel="stylesheet" href="style.css">
   <script>
@@ -53,6 +53,7 @@ foreach ($bgImages as $img) {
   <script src="fifteen.js" defer></script>
 </head>
 <body>
+  <!-- Navigation -->
   <nav>
     <ul>
       <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin'): ?>
@@ -64,29 +65,34 @@ foreach ($bgImages as $img) {
     </ul>
   </nav>
 
-    <!-- Debug info -->
-    <div style="position: fixed; top: 10px; right: 10px; background: rgba(0,0,0,0.8); color: white; padding: 10px; border-radius: 5px; font-size: 12px; z-index: 9999;">
-        Role: <?= htmlspecialchars($_SESSION['role'] ?? 'none') ?><br>
-        User ID: <?= htmlspecialchars($_SESSION['user_id'] ?? 'none') ?><br>
-        Username: <?= htmlspecialchars($_SESSION['username'] ?? 'none') ?>
-    </div>
+  <!-- Debug Info -->
+  <div style="position: fixed; top: 10px; right: 10px; background: rgba(0,0,0,0.8); color: white; padding: 10px; border-radius: 5px; font-size: 12px; z-index: 9999;">
+    Role: <?= htmlspecialchars($_SESSION['role'] ?? 'none') ?><br>
+    User ID: <?= htmlspecialchars($_SESSION['user_id'] ?? 'none') ?><br>
+    Username: <?= htmlspecialchars($_SESSION['username'] ?? 'none') ?>
+  </div>
 
+  <!-- Header -->
   <header>
     <h1>Fifteen Puzzle</h1>
   </header>
 
+  <!-- Intro -->
   <section class="intro">
     <div>
       The goal of the fifteen puzzle is to un-jumble its fifteen squares
       by repeatedly making moves that slide squares into the empty space.
-      How quickly can you solve it? Click "Shuffle" to begin
+      How quickly can you solve it? Click "Shuffle" to begin.
     </div>
   </section><br>
 
-    <div id="hud" style="text-align:center; margin-top:10px;">
-        <strong>Time:</strong> <span id="time-counter">0</span>s |
-        <strong>Moves:</strong> <span id="move-counter">0</span>
-    </div>
+  <!-- Timer and Move HUD -->
+  <div id="hud" style="text-align:center; margin-top:10px;">
+    <strong>Time:</strong> <span id="time-counter">0</span>s |
+    <strong>Moves:</strong> <span id="move-counter">0</span>
+  </div>
+
+  <!-- Background Selector -->
   <form style="text-align:center;">
     <label for="bg-select"><strong>Select Image:</strong></label>
     <select id="bg-select" onchange="changeBackground(this.value)">
@@ -94,23 +100,26 @@ foreach ($bgImages as $img) {
       <?php foreach ($bgImages as $bg): ?>
         <option value="uploads/<?= htmlspecialchars($bg['filename']) ?>"
           <?= (isset($prefs['preferred_background_image_id']) && $bg['image_id'] == $prefs['preferred_background_image_id']) ? 'selected' : '' ?>>
-          <?= htmlspecialchars($bg['filename']) ?>
+          <?= htmlspecialchars($bg['display_name'] ?: $bg['filename']) ?>
         </option>
       <?php endforeach; ?>
     </select>
   </form>
 
+  <!-- Puzzle Container -->
   <div>
     <div id="puzzlearea">
       <div class="controls"></div>
     </div>
   </div>
 
+  <!-- Shuffle/Cheat Buttons -->
   <div style="text-align: center;">
     <button id="shufflebutton">Shuffle</button>
     <button id="cheat-button" style="display:none;">Cheat (Show Solution)</button>
   </div><br>
 
+  <!-- Puzzle History -->
   <section class="history">
     <div>
       American puzzle author and mathematician Sam Loyd is often falsely credited with creating the puzzle;
@@ -119,6 +128,7 @@ foreach ($bgImages as $img) {
     </div>
   </section><br>
 
+  <!-- Validator Links -->
   <div class="validators">
     <div class="validators" style="position: fixed; bottom: 10px; right: 10px; z-index: 100;">
       <a href="https://validator.w3.org/"><img src="./img/valid-xhtml11.png" alt="HTML Validator"></a>
@@ -127,6 +137,7 @@ foreach ($bgImages as $img) {
     </div>
   </div>
 
+  <!-- Win Message Modal -->
   <div id="win-message">
     <div class="win-content">
       <p>🎉 Congratulations, Puzzle solved! 🎉</p>
