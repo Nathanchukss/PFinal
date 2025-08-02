@@ -51,15 +51,23 @@ window.onload = function () {
         tile.style.position = "absolute";
         tile.style.cursor = "pointer";
 
-        if (animationsEnabled) {
-          tile.style.transition = "left 0.3s, top 0.3s";
-        }
-
         puzzleArea.appendChild(tile);
         tiles.push(tile);
         count++;
       }
     }
+  }
+
+  applyAnimationSetting();
+
+  function applyAnimationSetting() {
+    tiles.forEach(tile => {
+      if (animationsEnabled) {
+        tile.style.transition = "left 0.3s, top 0.3s";
+      } else {
+        tile.style.transition = "none";
+      }
+    });
   }
 
   // Tile interaction
