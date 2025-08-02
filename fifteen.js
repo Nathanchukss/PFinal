@@ -123,38 +123,64 @@ window.onload = function () {
       moveDisplay.textContent = 0;
       timeDisplay.textContent = 0;
 
-      // Hide win message and cheat button (optional)
+      // Hide win message and cheat button
       winMessage.style.display = "none";
       cheatBtn.style.display = "none";
 
-      // (Don't call checkIfSolved, and don't send stats)
-      alert("Puzzle solved using cheat — stats won't be recorded.");
+      alert("Puzzle solved using cheat mode (stats won't be recorded.)");
     });
   }
 
   // --- Game Logic ---
+
+  // Check if tile is in same row or column as the blank tile
   function isMovable(tile) {
     const x = parseInt(tile.style.left);
     const y = parseInt(tile.style.top);
-    const dx = Math.abs(x - blankX);
-    const dy = Math.abs(y - blankY);
-    return (dx + dy === tileSize);
+    return (x === blankX || y === blankY);
   }
 
+  // Slide all tiles in line toward the blank space
   function moveTile(tile) {
     const x = parseInt(tile.style.left);
     const y = parseInt(tile.style.top);
+    const tilesToMove = [];
 
-    tile.style.left = blankX + "px";
-    tile.style.top = blankY + "px";
+    if (y === blankY) {
+      const dir = x < blankX ? 1 : -1;
+      for (let i = blankX - dir * tileSize; dir === 1 ? i >= x : i <= x; i -= dir * tileSize) {
+        const t = getTileAt(i, y);
+        if (t) tilesToMove.push(t);
+      }
+    } else if (x === blankX) {
+      const dir = y < blankY ? 1 : -1;
+      for (let i = blankY - dir * tileSize; dir === 1 ? i >= y : i <= y; i -= dir * tileSize) {
+        const t = getTileAt(x, i);
+        if (t) tilesToMove.push(t);
+      }
+    }
 
-    blankX = x;
-    blankY = y;
+    tilesToMove.forEach(t => {
+      const tempX = parseInt(t.style.left);
+      const tempY = parseInt(t.style.top);
+      t.style.left = blankX + "px";
+      t.style.top = blankY + "px";
+      blankX = tempX;
+      blankY = tempY;
+    });
 
-    moveCount++;
-    if (soundEnabled) moveSound.play();
+    moveCount += tilesToMove.length;
     moveDisplay.textContent = moveCount;
+    if (soundEnabled) moveSound.play();
     checkIfSolved();
+  }
+
+  // Return tile at a specific (x,y) position
+  function getTileAt(x, y) {
+    return tiles.find(t =>
+      parseInt(t.style.left) === x &&
+      parseInt(t.style.top) === y
+    );
   }
 
   function shuffle() {
@@ -207,7 +233,6 @@ window.onload = function () {
       const backgroundPath = bgDropdown ? bgDropdown.value : "";
       sendGameStats(timeTaken, moveCount, backgroundPath);
 
-      // Append current and global best stats
       fetch(`get_global_best.php`)
         .then(res => res.json())
         .then(data => {
