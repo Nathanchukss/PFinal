@@ -9,28 +9,31 @@ if (!isset($_SESSION['user_id'])) {
 
 $user_id = $_SESSION['user_id'];
 
-// Fetch available active backgrounds
+// Fetch active backgrounds
 $images = $pdo->query("SELECT * FROM background_images WHERE is_active = 1 ORDER BY upload_time DESC")->fetchAll();
 
-// Fetch or initialize user preferences
+// Fetch existing preferences
 $stmt = $pdo->prepare("SELECT * FROM user_preferences WHERE user_id = ?");
 $stmt->execute([$user_id]);
 $prefs = $stmt->fetch();
 
 if (!$prefs) {
-  $pdo->prepare("INSERT INTO user_preferences (user_id) VALUES (?)")->execute([$user_id]);
+  // Insert initial defaults
+  $pdo->prepare("INSERT INTO user_preferences (user_id, default_puzzle_size, preferred_background_image_id, sound_enabled, animations_enabled)
+                 VALUES (?, '4x4', NULL, 1, 1)")->execute([$user_id]);
+
   $prefs = [
     'default_puzzle_size' => '4x4',
     'preferred_background_image_id' => null,
-    'sound_enabled' => true,
-    'animations_enabled' => true
+    'sound_enabled' => 1,
+    'animations_enabled' => 1
   ];
 }
 
-// Save preferences on POST
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-  $size = $_POST["puzzle_size"];
-  $bg_id = $_POST["background"];
+  // Use fallback values if nothing is posted
+  $size = $_POST["puzzle_size"] ?? "4x4";
+  $bg_id = isset($_POST["background"]) && $_POST["background"] !== "" ? $_POST["background"] : null;
   $sound = isset($_POST["sound_enabled"]) ? 1 : 0;
   $anim = isset($_POST["animations_enabled"]) ? 1 : 0;
 
@@ -39,47 +42,78 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     SET default_puzzle_size = ?, preferred_background_image_id = ?, sound_enabled = ?, animations_enabled = ?
     WHERE user_id = ?
   ");
-  $stmt->execute([$size, $bg_id ?: null, $sound, $anim, $user_id]);
+  $stmt->execute([$size, $bg_id, $sound, $anim, $user_id]);
 
-  echo "<p style='text-align:center; color:green;'>Preferences saved!</p>";
+  // Refresh local preferences for display
+  $prefs = [
+    'default_puzzle_size' => $size,
+    'preferred_background_image_id' => $bg_id,
+    'sound_enabled' => $sound,
+    'animations_enabled' => $anim
+  ];
+
+  $message = "Preferences saved!";
 }
 ?>
-
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>User Preferences</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Preferences - Fifteen Puzzle</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <div class="preferences-container">
+    <div class="preferences-card">
+      <!-- Preferences Header -->
+      <div class="preferences-header">
+        <h2>Update Your Puzzle Preferences</h2>
+      </div>
 
-  <h2 style="text-align:center;">Update Your Puzzle Preferences</h2>
+      <?php if (isset($message)): ?>
+        <div class="preferences-message">
+          <?= htmlspecialchars($message) ?>
+        </div>
+      <?php endif; ?>
 
-  <form method="POST" style="max-width: 400px; margin:auto;">
-    <label><strong>Default Puzzle Size:</strong></label>
-    <select name="puzzle_size">
-      <?php foreach (['4x4', '5x5', '6x6'] as $option): ?>
-        <option value="<?= $option ?>" <?= $prefs['default_puzzle_size'] === $option ? 'selected' : '' ?>><?= $option ?></option>
-      <?php endforeach; ?>
-    </select><br><br>
+      <!-- Preferences Form -->
+      <form method="POST" class="preferences-form">
+        <label for="puzzle_size">Default Puzzle Size:</label>
+        <select name="puzzle_size" id="puzzle_size">
+          <?php foreach (['4x4', '5x5', '6x6'] as $option): ?>
+            <option value="<?= $option ?>" <?= $prefs['default_puzzle_size'] === $option ? 'selected' : '' ?>><?= $option ?></option>
+          <?php endforeach; ?>
+        </select>
 
-    <label><strong>Preferred Background Image:</strong></label>
-    <select name="background">
-      <option value="">Default</option>
-      <?php foreach ($images as $img): ?>
-        <option value="<?= $img['image_id'] ?>" <?= $prefs['preferred_background_image_id'] == $img['image_id'] ? 'selected' : '' ?>>
-          <?= htmlspecialchars($img['filename']) ?>
-        </option>
-      <?php endforeach; ?>
-    </select><br><br>
+        <label for="background">Preferred Background Image:</label>
+        <select name="background" id="background">
+          <option value="">Default</option>
+          <?php foreach ($images as $img): ?>
+            <option value="<?= $img['image_id'] ?>" <?= $prefs['preferred_background_image_id'] == $img['image_id'] ? 'selected' : '' ?>>
+              <?= htmlspecialchars($img['display_name'] ?: $img['filename']) ?>
+            </option>
+          <?php endforeach; ?>
+        </select>
 
-    <label><input type="checkbox" name="sound_enabled" <?= $prefs['sound_enabled'] ? 'checked' : '' ?>> Enable Sound</label><br>
-    <label><input type="checkbox" name="animations_enabled" <?= $prefs['animations_enabled'] ? 'checked' : '' ?>> Enable Animations</label><br><br>
+        <div class="checkbox-group">
+          <label>
+            <input type="checkbox" name="sound_enabled" <?= $prefs['sound_enabled'] ? 'checked' : '' ?>>
+            Enable Sound Effects
+          </label>
+          <label>
+            <input type="checkbox" name="animations_enabled" <?= $prefs['animations_enabled'] ? 'checked' : '' ?>>
+            Enable Animations
+          </label>
+        </div>
 
-    <button type="submit">Save Preferences</button>
-  </form>
+        <button type="submit">Save Preferences</button>
+      </form>
 
-  <p style="text-align:center;"><a href="fifteen.php">← Back to Game</a></p>
-
+      <div style="text-align: center; margin-top: 30px;">
+        <a href="fifteen.php" class="back-btn">← Back to Game</a>
+      </div>
+    </div>
+  </div>
 </body>
 </html>
