@@ -26,6 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($_POST['action'] === 'toggle') {
             $pdo->prepare("UPDATE background_images SET is_active = NOT is_active WHERE image_id = ?")->execute([$imgId]);
         } elseif ($_POST['action'] === 'delete') {
+            // Use ON DELETE SET NULL strategy, so we can safely delete
             $pdo->prepare("DELETE FROM background_images WHERE image_id = ?")->execute([$imgId]);
         }
     }
@@ -131,7 +132,7 @@ $stats = $pdo->query("
         <thead>
           <tr>
             <th>Preview</th>
-            <th>Filename</th>
+            <th>Display Name</th>
             <th>Uploader</th>
             <th>Status</th>
             <th>Uploaded</th>
@@ -141,8 +142,11 @@ $stats = $pdo->query("
         <tbody>
           <?php foreach ($images as $img): ?>
             <tr>
-              <td><img src="uploads/<?= htmlspecialchars($img['filename']) ?>" alt="Background preview"></td>
-              <td><?= htmlspecialchars($img['filename']) ?></td>
+              <td><img src="uploads/<?= htmlspecialchars($img['filename']) ?>" alt="Background preview" width="100"></td>
+              <?php
+                $label = $img['display_name'] ?? $img['filename'];
+              ?>
+              <td><strong><?= htmlspecialchars($label) ?></strong></td>
               <td><?= htmlspecialchars($img['username']) ?></td>
               <td>
                 <span class="<?= $img['is_active'] ? 'status-active' : 'status-inactive' ?>">
