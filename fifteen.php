@@ -83,6 +83,10 @@ foreach ($bgImages as $img) {
     </div>
   </section><br>
 
+    <div id="hud" style="text-align:center; margin-top:10px;">
+        <strong>Time:</strong> <span id="time-counter">0</span>s |
+        <strong>Moves:</strong> <span id="move-counter">0</span>
+    </div>
   <form style="text-align:center;">
     <label for="bg-select"><strong>Select Image:</strong></label>
     <select id="bg-select" onchange="changeBackground(this.value)">
