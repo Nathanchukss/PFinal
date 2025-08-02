@@ -81,7 +81,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
       <form method="POST" class="preferences-form">
         <label for="puzzle_size">Default Puzzle Size:</label>
         <select name="puzzle_size" id="puzzle_size">
-          <?php foreach (['4x4', '5x5', '6x6'] as $option): ?>
+          <?php foreach (['4x4', '5x5'] as $option): ?>
             <option value="<?= $option ?>" <?= $prefs['default_puzzle_size'] === $option ? 'selected' : '' ?>><?= $option ?></option>
           <?php endforeach; ?>
         </select>
