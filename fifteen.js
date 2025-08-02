@@ -12,10 +12,15 @@ window.onload = function () {
   let blankX = 400 - tileSize;
   let blankY = 400 - tileSize;
   let gameStarted = false;
+  let timerInterval = null;
 
+  // HUD Elements
+  const timeDisplay = document.getElementById("time-counter");
+  const moveDisplay = document.getElementById("move-counter");
   const winMessage = document.getElementById("win-message");
   const playAgainBtn = document.getElementById("play-again-btn");
   const closeWinBtn = document.getElementById("close-win-btn");
+  const cheatBtn = document.getElementById("cheat-button");
 
   // Audio
   const soundEnabled = (typeof USER_PREFS !== "undefined" && USER_PREFS.sound) || false;
@@ -23,6 +28,7 @@ window.onload = function () {
   const moveSound = new Audio("sounds/move.mp3");
   const winSound = new Audio("sounds/win.mp3");
   const againSound = new Audio("sounds/again.mp3");
+
 
   // Create tiles
   let count = 1;
@@ -85,7 +91,7 @@ window.onload = function () {
     changeBackground(dropdown.value);
   }
 
-  // Play Again / Close buttons
+  // Play Again / Close buttons / Cheat button
   if (playAgainBtn) {
     playAgainBtn.addEventListener("click", () => {
       if (soundEnabled) againSound.play();
@@ -97,6 +103,23 @@ window.onload = function () {
   if (closeWinBtn) {
     closeWinBtn.addEventListener("click", () => {
       hideWinMessage();
+    });
+  }
+
+  if (cheatBtn) {
+    cheatBtn.addEventListener("click", () => {
+      for (let i = 0; i < tiles.length; i++) {
+        const tile = tiles[i];
+        const correctX = (i % gridSize) * tileSize;
+        const correctY = Math.floor(i / gridSize) * tileSize;
+        tile.style.left = correctX + "px";
+        tile.style.top = correctY + "px";
+      }
+      blankX = 400 - tileSize;
+      blankY = 400 - tileSize;
+      moveCount++;
+      moveDisplay.textContent = moveCount;
+      checkIfSolved();
     });
   }
 
@@ -115,12 +138,13 @@ window.onload = function () {
 
     tile.style.left = blankX + "px";
     tile.style.top = blankY + "px";
-
+    
     blankX = x;
     blankY = y;
 
     moveCount++;
     if (soundEnabled) moveSound.play();
+    moveDisplay.textContent = moveCount;
     checkIfSolved();
   }
 
@@ -138,7 +162,16 @@ window.onload = function () {
     gameStarted = true;
     moveCount = 0;
     startTime = Date.now();
+    moveDisplay.textContent = 0;
     winMessage.style.display = "none";
+    cheatBtn.style.display = "inline-block";
+
+    clearInterval(timerInterval);
+    timerInterval = setInterval(() => {
+      const elapsed = Math.floor((Date.now() - startTime) / 1000);
+      timeDisplay.textContent = elapsed;
+    }, 1000);
+
     if (dropdown) changeBackground(dropdown.value);
   }
 
@@ -157,8 +190,9 @@ window.onload = function () {
 
     if (isSolved && blankX === 400 - tileSize && blankY === 400 - tileSize) {
       winMessage.style.display = "flex";
+      cheatBtn.style.display = "none";
+      clearInterval(timerInterval);
       if (soundEnabled) winSound.play();
-
       const timeTaken = Math.floor((Date.now() - startTime) / 1000);
       const bgDropdown = document.getElementById("bg-select");
       const backgroundPath = bgDropdown ? bgDropdown.value : "";
@@ -189,12 +223,7 @@ function sendGameStats(timeTaken, movesCount, backgroundPath) {
   fetch("save_game_stats.php", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      time_taken: timeTaken,
-      moves: movesCount,
-      win: true,
-      background: backgroundPath
-    })
+    body: JSON.stringify({ time_taken: timeTaken, moves: movesCount, win: true, background: backgroundPath })
   });
 }
 

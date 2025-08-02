@@ -108,6 +108,7 @@ foreach ($bgImages as $img) {
 
   <div style="text-align: center;">
     <button id="shufflebutton">Shuffle</button>
+    <button id="cheat-button" style="display:none;">Cheat (Show Solution)</button>
   </div><br>
 
   <section class="history">
