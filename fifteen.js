@@ -101,6 +101,7 @@ window.onload = function () {
 
   if (cheatBtn) {
     cheatBtn.addEventListener("click", () => {
+      // Arrange all tiles into solved positions
       for (let i = 0; i < tiles.length; i++) {
         const tile = tiles[i];
         const correctX = (i % gridSize) * tileSize;
@@ -108,11 +109,26 @@ window.onload = function () {
         tile.style.left = correctX + "px";
         tile.style.top = correctY + "px";
       }
+
+      // Place blank in bottom-right
       blankX = 400 - tileSize;
       blankY = 400 - tileSize;
-      moveCount++;
-      moveDisplay.textContent = moveCount;
-      checkIfSolved();
+
+      // Stop timer
+      clearInterval(timerInterval);
+
+      // Reset game state
+      gameStarted = false;
+      moveCount = 0;
+      moveDisplay.textContent = 0;
+      timeDisplay.textContent = 0;
+
+      // Hide win message and cheat button (optional)
+      winMessage.style.display = "none";
+      cheatBtn.style.display = "none";
+
+      // (Don't call checkIfSolved, and don't send stats)
+      alert("Puzzle solved using cheat — stats won't be recorded.");
     });
   }
 
