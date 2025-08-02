@@ -99,6 +99,8 @@ window.onload = function () {
     playAgainBtn.addEventListener("click", () => {
       if (soundEnabled) againSound.play();
       hideWinMessage();
+      const oldStats = document.getElementById("stats-block");
+      if (oldStats) oldStats.remove();
       shuffle();
     });
   }
@@ -249,12 +251,16 @@ window.onload = function () {
             ? `🏆 Best Time: ${data.best_time}s<br>📉 Best Moves: ${data.best_moves}<br>👤 Player: ${data.best_user}`
             : `No winning records yet.`;
 
-          document.querySelector("#win-message .win-content").innerHTML += `
-            <div style="margin-top: 20px; text-align: center;">
+          const winContent = document.querySelector("#win-message .win-content");
+          const statsBlock = document.getElementById("stats-block");
+          if (statsBlock) statsBlock.remove(); // Clear old stats
+
+          winContent.insertAdjacentHTML("beforeend", `
+            <div id="stats-block" style="margin-top: 20px; text-align: center;">
               <p><strong>Your Stats:</strong><br>${currentStats}</p>
               <p><strong>🌟 All-Time Best:</strong><br>${bestStats}</p>
             </div>
-          `;
+          `);
         });
     } else {
       winMessage.style.display = "none";
