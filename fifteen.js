@@ -29,7 +29,6 @@ window.onload = function () {
   const winSound = new Audio("sounds/win.mp3");
   const againSound = new Audio("sounds/again.mp3");
 
-
   // Create tiles
   let count = 1;
   for (let row = 0; row < gridSize; row++) {
@@ -66,15 +65,11 @@ window.onload = function () {
   // Tile interaction
   tiles.forEach(tile => {
     tile.addEventListener("click", () => {
-      if (isMovable(tile)) {
-        moveTile(tile);
-      }
+      if (isMovable(tile)) moveTile(tile);
     });
-
     tile.addEventListener("mouseover", () => {
       if (isMovable(tile)) tile.classList.add("movablepiece");
     });
-
     tile.addEventListener("mouseout", () => {
       tile.classList.remove("movablepiece");
     });
@@ -91,7 +86,7 @@ window.onload = function () {
     changeBackground(dropdown.value);
   }
 
-  // Play Again / Close buttons / Cheat button
+  // Play Again / Close / Cheat button
   if (playAgainBtn) {
     playAgainBtn.addEventListener("click", () => {
       if (soundEnabled) againSound.play();
@@ -101,9 +96,7 @@ window.onload = function () {
   }
 
   if (closeWinBtn) {
-    closeWinBtn.addEventListener("click", () => {
-      hideWinMessage();
-    });
+    closeWinBtn.addEventListener("click", hideWinMessage);
   }
 
   if (cheatBtn) {
@@ -138,7 +131,7 @@ window.onload = function () {
 
     tile.style.left = blankX + "px";
     tile.style.top = blankY + "px";
-    
+
     blankX = x;
     blankY = y;
 
@@ -179,7 +172,6 @@ window.onload = function () {
     if (!gameStarted) return;
 
     let isSolved = true;
-
     tiles.forEach((tile, index) => {
       const correctX = (index % gridSize) * tileSize;
       const correctY = Math.floor(index / gridSize) * tileSize;
@@ -189,14 +181,32 @@ window.onload = function () {
     });
 
     if (isSolved && blankX === 400 - tileSize && blankY === 400 - tileSize) {
+      clearInterval(timerInterval);
       winMessage.style.display = "flex";
       cheatBtn.style.display = "none";
-      clearInterval(timerInterval);
       if (soundEnabled) winSound.play();
+
       const timeTaken = Math.floor((Date.now() - startTime) / 1000);
       const bgDropdown = document.getElementById("bg-select");
       const backgroundPath = bgDropdown ? bgDropdown.value : "";
       sendGameStats(timeTaken, moveCount, backgroundPath);
+
+      // Append current and global best stats
+      fetch(`get_global_best.php`)
+        .then(res => res.json())
+        .then(data => {
+          const currentStats = `⏱️ Time: ${timeTaken}s<br>🔢 Moves: ${moveCount}`;
+          const bestStats = data && data.best_time !== null
+            ? `🏆 Best Time: ${data.best_time}s<br>📉 Best Moves: ${data.best_moves}<br>👤 Player: ${data.best_user}`
+            : `No winning records yet.`;
+
+          document.querySelector("#win-message .win-content").innerHTML += `
+            <div style="margin-top: 20px; text-align: center;">
+              <p><strong>Your Stats:</strong><br>${currentStats}</p>
+              <p><strong>🌟 All-Time Best:</strong><br>${bestStats}</p>
+            </div>
+          `;
+        });
     } else {
       winMessage.style.display = "none";
     }
