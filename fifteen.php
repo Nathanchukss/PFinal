@@ -63,7 +63,7 @@ foreach ($bgImages as $img) {
       <li><a href="logout.php" class="nav-btn logout-btn">Logout</a></li>
     </ul>
   </nav>
-  
+
     <!-- Debug info -->
     <div style="position: fixed; top: 10px; right: 10px; background: rgba(0,0,0,0.8); color: white; padding: 10px; border-radius: 5px; font-size: 12px; z-index: 9999;">
         Role: <?= htmlspecialchars($_SESSION['role'] ?? 'none') ?><br>
