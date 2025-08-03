@@ -258,7 +258,7 @@ window.onload = function () {
           winContent.insertAdjacentHTML("beforeend", `
             <div id="stats-block" style="margin-top: 20px; text-align: center;">
               <p><strong>Your Stats:</strong><br>${currentStats}</p>
-              <p><strong>🌟 All-Time Best:</strong><br>${bestStats}</p>
+              <p><strong>All-Time Best:</strong><br>${bestStats}</p>
             </div>
           `);
         });
